@@ -1,5 +1,5 @@
 fint:
-  base-url: 'https://api.felleskomponent.no'
+  base-url: 'https://api.felleskomponent.no/personvern/samtykke'
   registration-id: 'fint'
 
 spring:
