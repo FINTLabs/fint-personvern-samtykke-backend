@@ -1,13 +1,18 @@
+fint:
+  base-url: 'https://api.felleskomponent.no'
+  registration-id: 'fint'
+
 spring:
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://idp.felleskomponent.no/nidp/oauth/nam/token
       client:
+        provider:
+          fint-idp:
+            token-uri: https://idp.felleskomponent.no/nidp/oauth/nam/token
         registration:
           fint:
             authorization-grant-type: password
             client-id: ${fint.core.oauth2.client-id}
             client-secret: ${fint.core.oauth2.client-secret}
-            scope: ${fint.core.oauth2.scope}
+            provider: fint-idp
+            scope: fint-client
