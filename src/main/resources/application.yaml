@@ -3,4 +3,11 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://idp.felleskomponent.no/nidp/oauth/nam
+          issuer-uri: https://idp.felleskomponent.no/nidp/oauth/nam/token
+      client:
+        registration:
+          fint:
+            authorization-grant-type: password
+            client-id: ${fint.core.oauth2.client-id}
+            client-secret: ${fint.core.oauth2.client-secret}
+            scope: ${fint.core.oauth2.scope}
