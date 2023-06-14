@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 public class WebClientConfig {
 
-    @Value("${fint.core.oauth2.uri}")
+    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     private String tokenUri;
 
     @Value("${fint.core.oauth2.client-id}")
