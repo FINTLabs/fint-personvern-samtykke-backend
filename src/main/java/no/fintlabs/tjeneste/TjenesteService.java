@@ -1,7 +1,6 @@
 package no.fintlabs.tjeneste;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.Link;
 import no.fint.model.resource.personvern.samtykke.TjenesteResource;
 import no.fint.model.resource.personvern.samtykke.TjenesteResources;
 import org.springframework.stereotype.Service;
@@ -23,10 +22,9 @@ public class TjenesteService {
     }
 
     @PostConstruct
-    private void test() {
-
-        Mono<TjenesteResources> tjenesteResourcesMono = getTjenesteResources();
-        tjenesteResourcesMono.subscribe(tjenesteResources ->
+    private List<Tjeneste> getTjenester() {
+        List<Tjeneste> tjenester = new ArrayList<>();
+        getTjenesteResources().subscribe(tjenesteResources ->
                 tjenesteResources
                         .getContent()
                         .forEach(tjenesteResource -> {
@@ -34,8 +32,9 @@ public class TjenesteService {
                             tjeneste.setId(tjenesteResource.getSystemId().getIdentifikatorverdi());
                             tjeneste.setName(tjenesteResource.getNavn());
                             tjeneste.setListOfRelationIds(getRelationIdsFromLinks(tjenesteResource));
-
+                            tjenester.add(tjeneste);
                         }));
+        return tjenester;
     }
 
     private List<String> getRelationIdsFromLinks(TjenesteResource tjenesteResource) {
