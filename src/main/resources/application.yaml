@@ -1,4 +1,5 @@
 fint:
+  org-id: 'fintlabs.no'
   base-url: 'https://api.felleskomponent.no/personvern/samtykke'
   registration-id: 'fint'
 
