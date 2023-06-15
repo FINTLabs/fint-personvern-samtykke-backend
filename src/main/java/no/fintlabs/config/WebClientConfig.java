@@ -21,6 +21,9 @@ import java.util.Map;
 @Configuration
 public class WebClientConfig {
 
+    @Value("${fint.org-id}")
+    private String orgId;
+
     @Value("${fint.registration-id}")
     private String registrationId;
 
@@ -70,6 +73,7 @@ public class WebClientConfig {
                 .exchangeStrategies(exchangeStrategies)
                 .filter(oauth2Client)
                 .baseUrl(baseUrl)
+                .defaultHeader("x-org-id", orgId)
                 .build();
     }
 
