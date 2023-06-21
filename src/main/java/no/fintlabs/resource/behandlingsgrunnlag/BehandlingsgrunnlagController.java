@@ -1,4 +1,4 @@
-package no.fintlabs.resource.behandling;
+package no.fintlabs.resource.behandlingsgrunnlag;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +13,10 @@ import java.util.List;
 @RestController
 public class BehandlingController {
 
-    private final BehandlingService behandlingService;
+    private final BehandlingsgrunnlagService behandlingService;
 
     @GetMapping
-    public ResponseEntity<List<Behandling>> getBehandlinger() {
+    public ResponseEntity<List<Behandlingsgrunnlag>> getBehandlinger() {
         return ResponseEntity.ok(behandlingService.getBehandlinger());
     }
 

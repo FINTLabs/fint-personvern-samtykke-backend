@@ -1,4 +1,4 @@
-package no.fintlabs.resource.behandling;
+package no.fintlabs.resource.behandlingsgrunnlag;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 @Service
 public class BehandlingKafkaConsumer {
 
-    private final BehandlingService behandlingService;
+    private final BehandlingsgrunnlagService behandlingService;
     private final EntityConsumerFactoryService entityConsumerFactoryService;
 
     @PostConstruct

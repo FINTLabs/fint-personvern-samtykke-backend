@@ -23,10 +23,12 @@ public class TjenesteService {
 
     public List<Tjeneste> getTjenester() {
         List<Tjeneste> tjenester = new ArrayList<>();
+
         getTjenesteResources().forEach(tjenesteResource -> {
             Tjeneste tjeneste = createTjeneste(tjenesteResource);
             tjenester.add(tjeneste);
         });
+
         return tjenester;
     }
 
