@@ -2,6 +2,10 @@ fint:
   org-id: 'fintlabs.no'
   base-url: 'https://api.felleskomponent.no/personvern/samtykke'
   registration-id: 'fint'
+  kafka:
+    default-replicas: 1
+    topic:
+      domain-context: 'fint-core'
 
 spring:
   security:
@@ -20,3 +24,7 @@ spring:
             client-secret: ${fint.core.oauth2.client-secret}
             provider: fint-idp
             scope: fint-client
+
+logging:
+  level:
+    org.apache.kafka: INFO
