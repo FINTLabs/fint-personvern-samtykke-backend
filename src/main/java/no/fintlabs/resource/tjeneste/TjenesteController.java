@@ -1,4 +1,4 @@
-package no.fintlabs.tjeneste;
+package no.fintlabs.resource.tjeneste;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

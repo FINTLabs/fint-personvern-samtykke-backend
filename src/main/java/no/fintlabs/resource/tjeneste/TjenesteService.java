@@ -1,11 +1,9 @@
-package no.fintlabs.tjeneste;
+package no.fintlabs.resource.tjeneste;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.personvern.samtykke.TjenesteResources;
+import no.fint.model.resource.personvern.samtykke.TjenesteResource;
 import no.fintlabs.utils.FintUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,34 +12,37 @@ import java.util.List;
 @Service
 public class TjenesteService {
 
+    private final List<TjenesteResource> tjenesteResources;
+
     private final FintUtils fintUtils;
 
-    private final WebClient webClient;
-
-    public TjenesteService(FintUtils fintUtils, WebClient webClient) {
+    public TjenesteService(FintUtils fintUtils) {
+        this.tjenesteResources = new ArrayList<>();
         this.fintUtils = fintUtils;
-        this.webClient = webClient;
     }
 
     public List<Tjeneste> getTjenester() {
         List<Tjeneste> tjenester = new ArrayList<>();
-        getTjenesteResources().subscribe(tjenesteResources ->
-                tjenesteResources
-                        .getContent()
-                        .forEach(tjenesteResource -> {
-                            Tjeneste tjeneste = new Tjeneste();
-                            tjeneste.setId(tjenesteResource.getSystemId().getIdentifikatorverdi());
-                            tjeneste.setName(tjenesteResource.getNavn());
-                            tjeneste.setBehandlingIds(fintUtils.getRelationIdsFromLinks(tjenesteResource, "behandling"));
-                            tjenester.add(tjeneste);
-                        }));
+        getTjenesteResources().forEach(tjenesteResource -> {
+            Tjeneste tjeneste = createTjeneste(tjenesteResource);
+            tjenester.add(tjeneste);
+        });
         return tjenester;
     }
 
-    private Mono<TjenesteResources> getTjenesteResources() {
-        return webClient.get()
-                .uri("/tjeneste")
-                .retrieve()
-                .bodyToMono(TjenesteResources.class);
+    private Tjeneste createTjeneste(TjenesteResource tjenesteResource) {
+        Tjeneste tjeneste = new Tjeneste();
+        tjeneste.setId(tjenesteResource.getSystemId().getIdentifikatorverdi());
+        tjeneste.setName(tjenesteResource.getNavn());
+        tjeneste.setBehandlingIds(fintUtils.getRelationIdsFromLinks(tjenesteResource, "behandling"));
+        return tjeneste;
+    }
+
+    private List<TjenesteResource> getTjenesteResources() {
+        return tjenesteResources;
+    }
+
+    public void addTjeneste(TjenesteResource tjenesteResource) {
+        tjenesteResources.add(tjenesteResource);
     }
 }
