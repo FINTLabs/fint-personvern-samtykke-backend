@@ -1,5 +1,6 @@
 package no.fintlabs.resource.behandling;
 
+import lombok.RequiredArgsConstructor;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 import no.fintlabs.utils.FintUtils;
 import org.springframework.stereotype.Service;
@@ -7,17 +8,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class BehandlingService {
 
     private final List<BehandlingResource> behandlingResources;
 
     private final FintUtils fintUtils;
-
-    public BehandlingService(FintUtils fintUtils) {
-        this.behandlingResources = new ArrayList<>();
-        this.fintUtils = fintUtils;
-    }
 
     public List<Behandling> getBehandlinger() {
         List<Behandling> behandlinger = new ArrayList<>();
