@@ -1,11 +1,8 @@
-package no.fintlabs.behandling;
+package no.fintlabs.resource.behandling;
 
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
-import no.fint.model.resource.personvern.samtykke.BehandlingResources;
 import no.fintlabs.utils.FintUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,25 +10,22 @@ import java.util.List;
 @Service
 public class BehandlingService {
 
+    private final List<BehandlingResource> behandlingResources;
+
     private final FintUtils fintUtils;
 
-    private final WebClient webClient;
-
-    public BehandlingService(FintUtils fintUtils, WebClient webClient) {
-        this.webClient = webClient;
+    public BehandlingService(FintUtils fintUtils) {
+        this.behandlingResources = new ArrayList<>();
         this.fintUtils = fintUtils;
     }
 
     public List<Behandling> getBehandlinger() {
         List<Behandling> behandlinger = new ArrayList<>();
 
-        fetchBehandlingResources().
-                subscribe(behandlingResources -> behandlingResources
-                        .getContent()
-                        .forEach(behandlingResource -> {
-                            Behandling behandling = createBehandlingResource(behandlingResource);
-                            behandlinger.add(behandling);
-                        }));
+        behandlingResources.forEach(behandlingResource -> {
+            Behandling behandling = createBehandlingResource(behandlingResource);
+            behandlinger.add(behandling);
+        });
 
         return behandlinger;
     }
@@ -50,11 +44,8 @@ public class BehandlingService {
         return behandling;
     }
 
-    private Mono<BehandlingResources> fetchBehandlingResources() {
-        return webClient.get()
-                .uri("/behandling")
-                .retrieve()
-                .bodyToMono(BehandlingResources.class);
+    public void addBehandlingResource(BehandlingResource behandlingResource) {
+        behandlingResources.add(behandlingResource);
     }
 
 }

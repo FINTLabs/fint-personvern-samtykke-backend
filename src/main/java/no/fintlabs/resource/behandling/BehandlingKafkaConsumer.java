@@ -1,7 +1,8 @@
-package no.fintlabs.resource.tjeneste;
+package no.fintlabs.resource.behandling;
 
 import lombok.Getter;
-import no.fint.model.resource.personvern.samtykke.TjenesteResource;
+import lombok.RequiredArgsConstructor;
+import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 import no.fintlabs.kafka.common.topic.pattern.FormattedTopicComponentPattern;
 import no.fintlabs.kafka.entity.EntityConsumerFactoryService;
 import no.fintlabs.kafka.entity.topic.EntityTopicNamePatternParameters;
@@ -9,23 +10,18 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
+@RequiredArgsConstructor
 @Getter
 @Service
-public class TjenesteKafkaConsumer {
+public class BehandlingKafkaConsumer {
 
-    private final TjenesteService tjenesteService;
-
+    private final BehandlingService behandlingService;
     private final EntityConsumerFactoryService entityConsumerFactoryService;
-
-    public TjenesteKafkaConsumer(TjenesteService tjenesteService, EntityConsumerFactoryService entityConsumerFactoryService) {
-        this.tjenesteService = tjenesteService;
-        this.entityConsumerFactoryService = entityConsumerFactoryService;
-    }
 
     @PostConstruct
     private void setupConsumer() {
         entityConsumerFactoryService.createFactory(
-                TjenesteResource.class,
+                BehandlingResource.class,
                 consumerRecord -> processEntity(consumerRecord.value())
         ).createContainer(
                 EntityTopicNamePatternParameters
@@ -36,8 +32,8 @@ public class TjenesteKafkaConsumer {
         );
     }
 
-    private void processEntity(TjenesteResource resource) {
-        tjenesteService.addTjeneste(resource);
+    private void processEntity(BehandlingResource resource) {
+        behandlingService.addBehandlingResource(resource);
     }
 
 }

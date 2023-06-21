@@ -1,4 +1,4 @@
-package no.fintlabs.behandling;
+package no.fintlabs.resource.behandling;
 
 import lombok.Data;
 
