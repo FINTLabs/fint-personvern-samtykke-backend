@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/behandling")
+@RequestMapping("/behandlingsgrunnlag")
 @RestController
-public class BehandlingController {
+public class BehandlingsgrunnlagController {
 
     private final BehandlingsgrunnlagService behandlingService;
 
     @GetMapping
     public ResponseEntity<List<Behandlingsgrunnlag>> getBehandlinger() {
-        return ResponseEntity.ok(behandlingService.getBehandlinger());
+        return ResponseEntity.ok(behandlingService.getBehandlingsgrunnlags());
     }
 
 }

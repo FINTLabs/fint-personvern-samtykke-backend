@@ -1,51 +1,41 @@
 package no.fintlabs.resource.behandlingsgrunnlag;
 
-import no.fint.model.resource.personvern.samtykke.BehandlingResource;
-import no.fintlabs.utils.FintUtils;
+import lombok.RequiredArgsConstructor;
+import no.fint.model.resource.personvern.kodeverk.BehandlingsgrunnlagResource;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
-public class BehandlingService {
+public class BehandlingsgrunnlagService {
 
-    private final List<BehandlingResource> behandlingResources;
+    private final List<BehandlingsgrunnlagResource> behandlingsgrunnlagResources;
 
-    private final FintUtils fintUtils;
+    public List<Behandlingsgrunnlag> getBehandlingsgrunnlags() {
+        List<Behandlingsgrunnlag> behandlingsgrunnlags = new ArrayList<>();
 
-    public BehandlingService(FintUtils fintUtils) {
-        this.behandlingResources = new ArrayList<>();
-        this.fintUtils = fintUtils;
-    }
-
-    public List<Behandling> getBehandlinger() {
-        List<Behandling> behandlinger = new ArrayList<>();
-
-        behandlingResources.forEach(behandlingResource -> {
-            Behandling behandling = createBehandlingResource(behandlingResource);
-            behandlinger.add(behandling);
+        behandlingsgrunnlagResources.forEach(behandlingsgrunnlagResource -> {
+            Behandlingsgrunnlag behandlingsgrunnlag = createBehandlingsgrunnlag(behandlingsgrunnlagResource);
+            behandlingsgrunnlags.add(behandlingsgrunnlag);
         });
 
-        return behandlinger;
+        return behandlingsgrunnlags;
     }
 
-    private Behandling createBehandlingResource(BehandlingResource behandlingResource) {
-        Behandling behandling = new Behandling();
+    private Behandlingsgrunnlag createBehandlingsgrunnlag(BehandlingsgrunnlagResource behandlingsgrunnlagResource) {
+        Behandlingsgrunnlag behandlingsgrunnlag = new Behandlingsgrunnlag();
 
-        behandling.setId(behandlingResource.getSystemId().getIdentifikatorverdi());
-        behandling.setAktiv(behandlingResource.getAktiv());
-        behandling.setFormal(behandlingResource.getFormal());
+        behandlingsgrunnlag.setId(behandlingsgrunnlagResource.getSystemId().getIdentifikatorverdi());
+        behandlingsgrunnlag.setCode(behandlingsgrunnlagResource.getKode());
+        behandlingsgrunnlag.setName(behandlingsgrunnlagResource.getNavn());
 
-        behandling.setTjenesteIds(fintUtils.getRelationIdsFromLinks(behandlingResource, "tjeneste"));
-        behandling.setPersonopplysningIds(fintUtils.getRelationIdsFromLinks(behandlingResource, "personopplysning"));
-        behandling.setBehandlingsgrunnlagIds(fintUtils.getRelationIdsFromLinks(behandlingResource, "behandlingsgrunnlag"));
-
-        return behandling;
+        return behandlingsgrunnlag;
     }
 
-    public void addBehandlingResource(BehandlingResource behandlingResource) {
-        behandlingResources.add(behandlingResource);
+    public void addResource(BehandlingsgrunnlagResource behandlingsgrunnlagResource) {
+        behandlingsgrunnlagResources.add(behandlingsgrunnlagResource);
     }
 
 }

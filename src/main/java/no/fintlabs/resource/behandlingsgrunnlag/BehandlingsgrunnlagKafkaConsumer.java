@@ -2,7 +2,7 @@ package no.fintlabs.resource.behandlingsgrunnlag;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import no.fint.model.resource.personvern.samtykke.BehandlingResource;
+import no.fint.model.resource.personvern.kodeverk.BehandlingsgrunnlagResource;
 import no.fintlabs.kafka.common.topic.pattern.FormattedTopicComponentPattern;
 import no.fintlabs.kafka.entity.EntityConsumerFactoryService;
 import no.fintlabs.kafka.entity.topic.EntityTopicNamePatternParameters;
@@ -13,27 +13,27 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 @Getter
 @Service
-public class BehandlingKafkaConsumer {
+public class BehandlingsgrunnlagKafkaConsumer {
 
-    private final BehandlingsgrunnlagService behandlingService;
+    private final BehandlingsgrunnlagService behandlingsgrunnlagService;
     private final EntityConsumerFactoryService entityConsumerFactoryService;
 
     @PostConstruct
     private void setupConsumer() {
         entityConsumerFactoryService.createFactory(
-                BehandlingResource.class,
+                BehandlingsgrunnlagResource.class,
                 consumerRecord -> processEntity(consumerRecord.value())
         ).createContainer(
                 EntityTopicNamePatternParameters
                         .builder()
                         .orgId(FormattedTopicComponentPattern.any())
-                        .resource(FormattedTopicComponentPattern.anyOf("personvern.samtykke.tjeneste"))
+                        .resource(FormattedTopicComponentPattern.anyOf("personvern.kodeverk.behandlingsgrunnlag"))
                         .build()
         );
     }
 
-    private void processEntity(BehandlingResource resource) {
-        behandlingService.addBehandlingResource(resource);
+    private void processEntity(BehandlingsgrunnlagResource resource) {
+        behandlingsgrunnlagService.addResource(resource);
     }
 
 }
