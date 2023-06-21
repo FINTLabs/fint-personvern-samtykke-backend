@@ -24,7 +24,7 @@ public class TjenesteService {
     public List<Tjeneste> getTjenester() {
         List<Tjeneste> tjenester = new ArrayList<>();
 
-        getTjenesteResources().forEach(tjenesteResource -> {
+        tjenesteResources.forEach(tjenesteResource -> {
             Tjeneste tjeneste = createTjeneste(tjenesteResource);
             tjenester.add(tjeneste);
         });
@@ -38,10 +38,6 @@ public class TjenesteService {
         tjeneste.setName(tjenesteResource.getNavn());
         tjeneste.setBehandlingIds(fintUtils.getRelationIdsFromLinks(tjenesteResource, "behandling"));
         return tjeneste;
-    }
-
-    private List<TjenesteResource> getTjenesteResources() {
-        return tjenesteResources;
     }
 
     public void addTjeneste(TjenesteResource tjenesteResource) {
