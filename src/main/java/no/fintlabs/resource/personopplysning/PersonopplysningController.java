@@ -13,7 +13,6 @@ public class PersonopplysningController {
 
     private final PersonopplysningService personopplysningService;
 
-
     public PersonopplysningController(PersonopplysningService personopplysningService) {
         this.personopplysningService = personopplysningService;
     }

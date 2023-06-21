@@ -13,29 +13,30 @@ import java.util.List;
 public class TjenesteService {
 
     private final List<TjenesteResource> tjenesteResources;
-
     private final FintUtils fintUtils;
 
     public List<Tjeneste> getTjenester() {
         List<Tjeneste> tjenester = new ArrayList<>();
 
-        tjenesteResources.forEach(tjenesteResource -> {
-            Tjeneste tjeneste = createTjeneste(tjenesteResource);
+        tjenesteResources.forEach(resource -> {
+            Tjeneste tjeneste = createTjeneste(resource);
             tjenester.add(tjeneste);
         });
 
         return tjenester;
     }
 
-    private Tjeneste createTjeneste(TjenesteResource tjenesteResource) {
+    private Tjeneste createTjeneste(TjenesteResource resource) {
         Tjeneste tjeneste = new Tjeneste();
-        tjeneste.setId(tjenesteResource.getSystemId().getIdentifikatorverdi());
-        tjeneste.setName(tjenesteResource.getNavn());
-        tjeneste.setBehandlingIds(fintUtils.getRelationIdsFromLinks(tjenesteResource, "behandling"));
+
+        tjeneste.setId(resource.getSystemId().getIdentifikatorverdi());
+        tjeneste.setName(resource.getNavn());
+        tjeneste.setBehandlingIds(fintUtils.getRelationIdsFromLinks(resource, "behandling"));
+
         return tjeneste;
     }
 
-    public void addTjeneste(TjenesteResource tjenesteResource) {
-        tjenesteResources.add(tjenesteResource);
+    public void addResource(TjenesteResource resource) {
+        tjenesteResources.add(resource);
     }
 }

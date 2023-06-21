@@ -5,19 +5,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequestMapping("/tjeneste")
 @RestController
 public class TjenesteController {
 
     private final TjenesteService tjenesteService;
 
-
     public TjenesteController(TjenesteService tjenesteService) {
         this.tjenesteService = tjenesteService;
     }
 
     @GetMapping
-    public ResponseEntity<?> getTjenesteResources() {
+    public ResponseEntity<List<Tjeneste>> getTjenesteResources() {
         return ResponseEntity.ok(tjenesteService.getTjenester());
     }
 

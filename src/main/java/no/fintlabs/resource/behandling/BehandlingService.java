@@ -13,7 +13,6 @@ import java.util.List;
 public class BehandlingService {
 
     private final List<BehandlingResource> behandlingResources;
-
     private final FintUtils fintUtils;
 
     public List<Behandling> getBehandlinger() {
@@ -41,7 +40,7 @@ public class BehandlingService {
         return behandling;
     }
 
-    public void addBehandlingResource(BehandlingResource behandlingResource) {
+    public void addResource(BehandlingResource behandlingResource) {
         behandlingResources.add(behandlingResource);
     }
 

@@ -33,7 +33,7 @@ public class BehandlingKafkaConsumer {
     }
 
     private void processEntity(BehandlingResource resource) {
-        behandlingService.addBehandlingResource(resource);
+        behandlingService.addResource(resource);
     }
 
 }

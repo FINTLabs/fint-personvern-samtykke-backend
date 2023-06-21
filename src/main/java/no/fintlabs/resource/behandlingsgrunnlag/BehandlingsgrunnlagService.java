@@ -16,20 +16,20 @@ public class BehandlingsgrunnlagService {
     public List<Behandlingsgrunnlag> getBehandlingsgrunnlags() {
         List<Behandlingsgrunnlag> behandlingsgrunnlags = new ArrayList<>();
 
-        behandlingsgrunnlagResources.forEach(behandlingsgrunnlagResource -> {
-            Behandlingsgrunnlag behandlingsgrunnlag = createBehandlingsgrunnlag(behandlingsgrunnlagResource);
+        behandlingsgrunnlagResources.forEach(resource -> {
+            Behandlingsgrunnlag behandlingsgrunnlag = createBehandlingsgrunnlag(resource);
             behandlingsgrunnlags.add(behandlingsgrunnlag);
         });
 
         return behandlingsgrunnlags;
     }
 
-    private Behandlingsgrunnlag createBehandlingsgrunnlag(BehandlingsgrunnlagResource behandlingsgrunnlagResource) {
+    private Behandlingsgrunnlag createBehandlingsgrunnlag(BehandlingsgrunnlagResource resource) {
         Behandlingsgrunnlag behandlingsgrunnlag = new Behandlingsgrunnlag();
 
-        behandlingsgrunnlag.setId(behandlingsgrunnlagResource.getSystemId().getIdentifikatorverdi());
-        behandlingsgrunnlag.setCode(behandlingsgrunnlagResource.getKode());
-        behandlingsgrunnlag.setName(behandlingsgrunnlagResource.getNavn());
+        behandlingsgrunnlag.setId(resource.getSystemId().getIdentifikatorverdi());
+        behandlingsgrunnlag.setCode(resource.getKode());
+        behandlingsgrunnlag.setName(resource.getNavn());
 
         return behandlingsgrunnlag;
     }
