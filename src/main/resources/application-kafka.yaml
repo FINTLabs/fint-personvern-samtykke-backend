@@ -1,6 +1,11 @@
 fint:
   kafka:
+    enable-ssl: false
+    default-replicas: 1
     application-id: samtykke-admin-backend
-    enable-ssl: true
     topic:
       domain-context: fint-core
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
