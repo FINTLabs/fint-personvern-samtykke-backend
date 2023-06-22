@@ -1,0 +1,6 @@
+fint:
+  kafka:
+    application-id: consumer-utdanning-vurdering
+    enable-ssl: true
+    topic:
+      domain-context: fint-core
