@@ -1,1 +1,1 @@
-# FINT Personvern Samtykke Backend
+# FINT Samtykke Admin Backend
