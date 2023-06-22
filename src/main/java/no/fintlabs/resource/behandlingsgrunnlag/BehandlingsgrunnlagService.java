@@ -28,8 +28,8 @@ public class BehandlingsgrunnlagService {
         Behandlingsgrunnlag behandlingsgrunnlag = new Behandlingsgrunnlag();
 
         behandlingsgrunnlag.setId(resource.getSystemId().getIdentifikatorverdi());
-        behandlingsgrunnlag.setCode(resource.getKode());
-        behandlingsgrunnlag.setName(resource.getNavn());
+        behandlingsgrunnlag.setKode(resource.getKode());
+        behandlingsgrunnlag.setNavn(resource.getNavn());
 
         return behandlingsgrunnlag;
     }

@@ -28,8 +28,8 @@ public class PersonopplysningService {
         Personopplysning personopplysning = new Personopplysning();
 
         personopplysning.setId(personopplysningResource.getSystemId().getIdentifikatorverdi());
-        personopplysning.setCode(personopplysningResource.getKode());
-        personopplysning.setName(personopplysningResource.getNavn());
+        personopplysning.setKode(personopplysningResource.getKode());
+        personopplysning.setNavn(personopplysningResource.getNavn());
 
         return personopplysning;
     }

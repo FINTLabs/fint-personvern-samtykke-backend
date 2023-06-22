@@ -8,7 +8,7 @@ import java.util.List;
 public class Tjeneste {
 
     private String id;
-    private String name;
+    private String navn;
     private List<String> behandlingIds;
 
 }

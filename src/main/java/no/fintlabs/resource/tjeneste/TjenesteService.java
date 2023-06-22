@@ -30,7 +30,7 @@ public class TjenesteService {
         Tjeneste tjeneste = new Tjeneste();
 
         tjeneste.setId(resource.getSystemId().getIdentifikatorverdi());
-        tjeneste.setName(resource.getNavn());
+        tjeneste.setNavn(resource.getNavn());
         tjeneste.setBehandlingIds(fintUtils.getRelationIdsFromLinks(resource, "behandling"));
 
         return tjeneste;
