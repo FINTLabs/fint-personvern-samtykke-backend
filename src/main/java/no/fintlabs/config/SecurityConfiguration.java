@@ -12,7 +12,8 @@ import reactor.core.publisher.Mono;
 @Configuration
 public class SecurityConfiguration {
 
-    private static final String COMPONENT = "personvern_samtykke";
+    private static final String PERSONVERN_SAMTYKKE = "personvern_samtykke";
+    private static final String PERSONVERN_KODEVERK = "personvern_kodeverk";
 
     @Bean
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
@@ -28,11 +29,14 @@ public class SecurityConfiguration {
     }
 
     private Mono<AuthorizationDecision> hasRequiredOrgIdAndRole(Mono<Authentication> authentication, AuthorizationContext context) {
-        String role = String.format("ROLE_FINT_Client_%s", COMPONENT);
+        String firstRole = String.format("ROLE_FINT_Client_%s", PERSONVERN_SAMTYKKE);
+        String secondRole = String.format("ROLE_FINT_Client_%s", PERSONVERN_KODEVERK);
         return authentication.map(auth -> {
-            boolean hasRole = auth.getAuthorities().stream()
-                    .anyMatch(a -> a.getAuthority().equals(role));
-            return new AuthorizationDecision(hasRole);
+            boolean hasFirstRole = auth.getAuthorities().stream()
+                    .anyMatch(a -> a.getAuthority().equals(firstRole));
+            boolean hasSecondRole = auth.getAuthorities().stream()
+                    .anyMatch(a -> a.getAuthority().equals(secondRole));
+            return new AuthorizationDecision(hasFirstRole && hasSecondRole);
         });
     }
 
