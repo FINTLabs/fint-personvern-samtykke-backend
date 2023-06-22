@@ -19,7 +19,7 @@ spec:
     - secretRef:
         name: fint-samtykke-admin-backend-kafka
     - secretRef:
-        name: fint-samtykke-admin-backend-kafka-certificate
+        name: fint-samtykke-admin-backend-kafka-certificates
   kafka:
     enabled: true
     acls:
