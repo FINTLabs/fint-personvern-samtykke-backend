@@ -1,6 +1,6 @@
 fint:
   kafka:
-    application-id: consumer-utdanning-vurdering
+    application-id: samtykke-admin-backend
     enable-ssl: true
     topic:
       domain-context: fint-core
