@@ -13,7 +13,7 @@ metadata:
     fintlabs.no/org-id: fintlabs.no
 spec:
   orgId: fintlabs.no
-  image: docker/getting-started
+  image: ghcr.io/fintlabs/fint-samtykke-admin-backend:sha-0000000
   imagePullPolicy: Always
   envFrom:
     - secretRef:
