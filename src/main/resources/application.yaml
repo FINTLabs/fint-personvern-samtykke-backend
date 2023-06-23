@@ -6,7 +6,7 @@ spring:
 
 logging:
   level:
-    org.apache.kafka: DEBUG
-    no.fintlabs.kafka: DEBUG
-    org.springframework.kafka: DEBUG
+    org.apache.kafka: OFF
+    no.fintlabs.kafka: OFF
+    org.springframework.kafka: OFF
     no.fintlabs: DEBUG

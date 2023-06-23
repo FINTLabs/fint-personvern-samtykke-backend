@@ -1,11 +1,12 @@
+spring:
+  kafka:
+    consumer:
+      group-id: consumer
+  codec:
+    max-in-memory-size: 200MB
+
 fint:
   kafka:
-    enable-ssl: false
-    default-replicas: 1
     application-id: samtykke-admin-backend
     topic:
       domain-context: fint-core
-
-spring:
-  kafka:
-    bootstrap-servers: localhost:9092
