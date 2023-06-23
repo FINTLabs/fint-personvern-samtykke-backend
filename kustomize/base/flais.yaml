@@ -27,7 +27,7 @@ spec:
     hostname: replaceUrl
   ingress:
     enabled: true
-    basePath: /api
+    basePath: /api/samtykke
   resources:
     limits:
       memory: "1024Mi"
