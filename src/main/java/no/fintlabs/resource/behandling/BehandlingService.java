@@ -1,6 +1,7 @@
 package no.fintlabs.resource.behandling;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 import no.fintlabs.utils.FintUtils;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class BehandlingService {
@@ -40,8 +42,9 @@ public class BehandlingService {
         return behandling;
     }
 
-    public void addResource(BehandlingResource behandlingResource) {
-        behandlingResources.add(behandlingResource);
+    public void addResource(BehandlingResource resource) {
+        log.info(resource.toString());
+        behandlingResources.add(resource);
     }
 
 }

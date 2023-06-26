@@ -1,6 +1,7 @@
 package no.fintlabs.resource.tjeneste;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.samtykke.TjenesteResource;
 import no.fintlabs.utils.FintUtils;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class TjenesteService {
@@ -37,6 +39,7 @@ public class TjenesteService {
     }
 
     public void addResource(TjenesteResource resource) {
+        log.info(resource.toString());
         tjenesteResources.add(resource);
     }
 }

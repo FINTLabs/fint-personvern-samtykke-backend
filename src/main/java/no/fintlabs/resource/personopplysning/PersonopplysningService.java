@@ -1,12 +1,14 @@
 package no.fintlabs.resource.personopplysning;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.kodeverk.PersonopplysningResource;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class PersonopplysningService {
@@ -35,6 +37,7 @@ public class PersonopplysningService {
     }
 
     public void addResource(PersonopplysningResource resource) {
+        log.info(resource.toString());
         personopplysningResources.add(resource);
     }
 }
