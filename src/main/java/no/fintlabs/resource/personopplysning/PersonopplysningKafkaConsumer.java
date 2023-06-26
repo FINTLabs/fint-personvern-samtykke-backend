@@ -27,7 +27,7 @@ public class PersonopplysningKafkaConsumer {
                 EntityTopicNamePatternParameters
                         .builder()
                         .orgId(FormattedTopicComponentPattern.any())
-                        .resource(FormattedTopicComponentPattern.anyOf("personvern.kodeverk.personopplysning"))
+                        .resource(FormattedTopicComponentPattern.anyOf("personvern-kodeverk-personopplysning"))
                         .build()
         );
     }

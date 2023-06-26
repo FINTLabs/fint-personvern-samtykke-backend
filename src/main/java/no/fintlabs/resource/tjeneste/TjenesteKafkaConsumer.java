@@ -27,7 +27,7 @@ public class TjenesteKafkaConsumer {
                 EntityTopicNamePatternParameters
                         .builder()
                         .orgId(FormattedTopicComponentPattern.any())
-                        .resource(FormattedTopicComponentPattern.anyOf("personvern.samtykke.tjeneste"))
+                        .resource(FormattedTopicComponentPattern.anyOf("personvern-samtykke-tjeneste"))
                         .build()
         );
     }

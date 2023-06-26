@@ -27,7 +27,7 @@ public class BehandlingsgrunnlagKafkaConsumer {
                 EntityTopicNamePatternParameters
                         .builder()
                         .orgId(FormattedTopicComponentPattern.any())
-                        .resource(FormattedTopicComponentPattern.anyOf("personvern.kodeverk.behandlingsgrunnlag"))
+                        .resource(FormattedTopicComponentPattern.anyOf("personvern-kodeverk-behandlingsgrunnlag"))
                         .build()
         );
     }

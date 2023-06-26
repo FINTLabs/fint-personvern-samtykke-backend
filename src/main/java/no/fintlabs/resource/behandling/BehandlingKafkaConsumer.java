@@ -27,7 +27,7 @@ public class BehandlingKafkaConsumer {
                 EntityTopicNamePatternParameters
                         .builder()
                         .orgId(FormattedTopicComponentPattern.any())
-                        .resource(FormattedTopicComponentPattern.anyOf("personvern.samtykke.behandling"))
+                        .resource(FormattedTopicComponentPattern.anyOf("personvern-samtykke-behandling"))
                         .build()
         );
     }
