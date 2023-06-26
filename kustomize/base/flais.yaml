@@ -25,6 +25,7 @@ spec:
       - topic: '*.fint-core.*'
   url:
     hostname: replaceUrl
+    basePath: /api/samtykke
   ingress:
     enabled: true
     basePath: /api/samtykke
