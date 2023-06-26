@@ -28,7 +28,7 @@ public class TjenesteKafkaConsumer {
                         .builder()
                         .orgId(FormattedTopicComponentPattern.any())
                         .domainContext(FormattedTopicComponentPattern.anyOf("fint-core"))
-                        .resource(FormattedTopicComponentPattern.anyOf("personvern-samtykke-tjeneste"))
+                        .resource(FormattedTopicComponentPattern.endingWith("tjeneste"))
                         .build()
         );
     }
