@@ -27,6 +27,7 @@ public class TjenesteKafkaConsumer {
                 EntityTopicNamePatternParameters
                         .builder()
                         .orgId(FormattedTopicComponentPattern.any())
+                        .domainContext(FormattedTopicComponentPattern.anyOf("fint-core"))
                         .resource(FormattedTopicComponentPattern.anyOf("personvern-samtykke-tjeneste"))
                         .build()
         );

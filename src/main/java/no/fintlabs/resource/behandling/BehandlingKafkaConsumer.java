@@ -27,6 +27,7 @@ public class BehandlingKafkaConsumer {
                 EntityTopicNamePatternParameters
                         .builder()
                         .orgId(FormattedTopicComponentPattern.any())
+                        .domainContext(FormattedTopicComponentPattern.anyOf("fint-core"))
                         .resource(FormattedTopicComponentPattern.anyOf("personvern-samtykke-behandling"))
                         .build()
         );

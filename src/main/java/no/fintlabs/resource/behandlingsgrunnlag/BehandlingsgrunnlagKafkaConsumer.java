@@ -27,6 +27,7 @@ public class BehandlingsgrunnlagKafkaConsumer {
                 EntityTopicNamePatternParameters
                         .builder()
                         .orgId(FormattedTopicComponentPattern.any())
+                        .domainContext(FormattedTopicComponentPattern.anyOf("fint-core"))
                         .resource(FormattedTopicComponentPattern.anyOf("personvern-kodeverk-behandlingsgrunnlag"))
                         .build()
         );
