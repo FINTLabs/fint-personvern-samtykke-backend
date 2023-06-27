@@ -17,7 +17,7 @@ public class TjenesteTestData {
     }
 
     private void addTestData() {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 1; i < 3; i++) {
             Tjeneste tjeneste = createTjeneste(i);
             tjenesteList.add(tjeneste);
         }

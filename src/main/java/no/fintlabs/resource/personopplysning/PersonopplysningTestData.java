@@ -17,7 +17,7 @@ public class PersonopplysningTestData {
     }
 
     private void addTestData() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 1; i < 4; i++) {
             Personopplysning personopplysning = createPersonopplysning(i);
             personopplysningList.add(personopplysning);
         }

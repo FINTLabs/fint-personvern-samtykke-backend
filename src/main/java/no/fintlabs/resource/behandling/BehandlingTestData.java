@@ -17,7 +17,7 @@ public class BehandlingTestData {
     }
 
     private void addTestData() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 1; i < 4; i++) {
             Behandling behandling = createBehandling(i);
             behandlingList.add(behandling);
         }
