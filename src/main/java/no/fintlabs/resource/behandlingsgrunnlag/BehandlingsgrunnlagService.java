@@ -16,24 +16,24 @@ public class BehandlingsgrunnlagService {
     private final List<BehandlingsgrunnlagResource> behandlingsgrunnlagResources;
 
     public List<Behandlingsgrunnlag> getBehandlingsgrunnlags() {
-        List<Behandlingsgrunnlag> behandlingsgrunnlags = new ArrayList<>();
+        List<Behandlingsgrunnlag> personopplysnings = new ArrayList<>();
 
         behandlingsgrunnlagResources.forEach(resource -> {
-            Behandlingsgrunnlag behandlingsgrunnlag = createBehandlingsgrunnlag(resource);
-            behandlingsgrunnlags.add(behandlingsgrunnlag);
+            Behandlingsgrunnlag personopplysning = createBehandlingsgrunnlag(resource);
+            personopplysnings.add(personopplysning);
         });
 
-        return behandlingsgrunnlags;
+        return personopplysnings;
     }
 
     private Behandlingsgrunnlag createBehandlingsgrunnlag(BehandlingsgrunnlagResource resource) {
-        Behandlingsgrunnlag behandlingsgrunnlag = new Behandlingsgrunnlag();
+        Behandlingsgrunnlag personopplysning = new Behandlingsgrunnlag();
 
-        behandlingsgrunnlag.setId(resource.getSystemId().getIdentifikatorverdi());
-        behandlingsgrunnlag.setKode(resource.getKode());
-        behandlingsgrunnlag.setNavn(resource.getNavn());
+        personopplysning.setId(resource.getSystemId().getIdentifikatorverdi());
+        personopplysning.setKode(resource.getKode());
+        personopplysning.setNavn(resource.getNavn());
 
-        return behandlingsgrunnlag;
+        return personopplysning;
     }
 
     public void addResource(BehandlingsgrunnlagResource resource) {

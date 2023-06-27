@@ -12,14 +12,16 @@ import java.util.List;
 public class TjenesteController {
 
     private final TjenesteService tjenesteService;
+    private final TjenesteTestData tjenesteTestData;
 
-    public TjenesteController(TjenesteService tjenesteService) {
+    public TjenesteController(TjenesteService tjenesteService, TjenesteTestData tjenesteTestData) {
         this.tjenesteService = tjenesteService;
+        this.tjenesteTestData = tjenesteTestData;
     }
 
     @GetMapping
     public ResponseEntity<List<Tjeneste>> getTjenesteResources() {
-        return ResponseEntity.ok(tjenesteService.getTjenester());
+        return ResponseEntity.ok(tjenesteTestData.getList());
     }
 
 }

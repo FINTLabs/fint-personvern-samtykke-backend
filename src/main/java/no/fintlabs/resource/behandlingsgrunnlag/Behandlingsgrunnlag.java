@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Behandlingsgrunnlag {
 
-    private String id;
+    private int id;
     private String kode;
     private String navn;
 

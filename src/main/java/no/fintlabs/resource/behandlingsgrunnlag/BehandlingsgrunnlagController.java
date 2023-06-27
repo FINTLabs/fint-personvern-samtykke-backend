@@ -14,10 +14,11 @@ import java.util.List;
 public class BehandlingsgrunnlagController {
 
     private final BehandlingsgrunnlagService behandlingService;
+    private final BehandlingsgrunnlagTestData behandlingsgrunnlagTestData;
 
     @GetMapping
     public ResponseEntity<List<Behandlingsgrunnlag>> getBehandlinger() {
-        return ResponseEntity.ok(behandlingService.getBehandlingsgrunnlags());
+        return ResponseEntity.ok(behandlingsgrunnlagTestData.getList());
     }
 
 }

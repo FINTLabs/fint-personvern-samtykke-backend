@@ -7,8 +7,8 @@ import java.util.List;
 @Data
 public class Tjeneste {
 
-    private String id;
+    private int id;
     private String navn;
-    private List<String> behandlingIds;
+    private List<Integer> behandlingIds;
 
 }
