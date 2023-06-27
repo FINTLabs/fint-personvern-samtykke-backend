@@ -31,13 +31,13 @@ public class BehandlingService {
     private Behandling createBehandlingResource(BehandlingResource behandlingResource) {
         Behandling behandling = new Behandling();
 
-        behandling.setId(behandlingResource.getSystemId().getIdentifikatorverdi());
+//        behandling.setId(behandlingResource.getSystemId().getIdentifikatorverdi());
         behandling.setAktiv(behandlingResource.getAktiv());
         behandling.setFormal(behandlingResource.getFormal());
 
-        behandling.setTjenesteIds(fintUtils.getRelationIdsFromLinks(behandlingResource, "tjeneste"));
-        behandling.setPersonopplysningIds(fintUtils.getRelationIdsFromLinks(behandlingResource, "personopplysning"));
-        behandling.setBehandlingsgrunnlagIds(fintUtils.getRelationIdsFromLinks(behandlingResource, "behandlingsgrunnlag"));
+//        behandling.setTjenesteIds(fintUtils.getRelationIdsFromLinks(behandlingResource, "tjeneste"));
+//        behandling.setPersonopplysningIds(fintUtils.getRelationIdsFromLinks(behandlingResource, "personopplysning"));
+//        behandling.setBehandlingsgrunnlagIds(fintUtils.getRelationIdsFromLinks(behandlingResource, "behandlingsgrunnlag"));
 
         return behandling;
     }

@@ -29,7 +29,7 @@ public class BehandlingsgrunnlagService {
     private Behandlingsgrunnlag createBehandlingsgrunnlag(BehandlingsgrunnlagResource resource) {
         Behandlingsgrunnlag personopplysning = new Behandlingsgrunnlag();
 
-        personopplysning.setId(resource.getSystemId().getIdentifikatorverdi());
+//        personopplysning.setId(resource.getSystemId().getIdentifikatorverdi());
         personopplysning.setKode(resource.getKode());
         personopplysning.setNavn(resource.getNavn());
 

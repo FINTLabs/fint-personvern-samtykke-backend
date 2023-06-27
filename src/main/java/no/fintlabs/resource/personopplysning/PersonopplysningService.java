@@ -29,7 +29,7 @@ public class PersonopplysningService {
     private Personopplysning createPersonopplysning(PersonopplysningResource personopplysningResource) {
         Personopplysning personopplysning = new Personopplysning();
 
-        personopplysning.setId(personopplysningResource.getSystemId().getIdentifikatorverdi());
+//        personopplysning.setId(personopplysningResource.getSystemId().getIdentifikatorverdi());
         personopplysning.setKode(personopplysningResource.getKode());
         personopplysning.setNavn(personopplysningResource.getNavn());
 

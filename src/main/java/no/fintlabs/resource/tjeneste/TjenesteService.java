@@ -31,9 +31,9 @@ public class TjenesteService {
     private Tjeneste createTjeneste(TjenesteResource resource) {
         Tjeneste tjeneste = new Tjeneste();
 
-        tjeneste.setId(resource.getSystemId().getIdentifikatorverdi());
+//        tjeneste.setId(resource.getSystemId().getIdentifikatorverdi());
         tjeneste.setNavn(resource.getNavn());
-        tjeneste.setBehandlingIds(fintUtils.getRelationIdsFromLinks(resource, "behandling"));
+//        tjeneste.setBehandlingIds(fintUtils.getRelationIdsFromLinks(resource, "behandling"));
 
         return tjeneste;
     }
