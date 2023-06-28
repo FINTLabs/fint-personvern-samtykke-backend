@@ -63,6 +63,7 @@ public class TjenesteTestData {
 
         tjeneste.setId(UUID.randomUUID().toString());
         tjeneste.setNavn(name);
+        tjeneste.setBehandlingIds(new ArrayList<>());
 
         tjenesteList.add(tjeneste);
         return tjeneste;

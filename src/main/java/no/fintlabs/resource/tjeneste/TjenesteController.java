@@ -23,8 +23,8 @@ public class TjenesteController {
     }
 
     @PostMapping
-    public ResponseEntity<Tjeneste> createTjeneste(@RequestBody String name) {
-        return ResponseEntity.ok(tjenesteTestData.createTjeneste(name));
+    public ResponseEntity<Tjeneste> createTjeneste(@RequestBody TjenesteRequestPayload requestPayload) {
+        return ResponseEntity.ok(tjenesteTestData.createTjeneste(requestPayload.getName()));
     }
 
 }
