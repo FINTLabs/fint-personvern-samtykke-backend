@@ -26,12 +26,16 @@ public class BehandlingTestData {
     private Behandling createBehandling(int id) {
         Behandling behandling = new Behandling();
         behandling.setId(id);
-        behandling.setAktiv(true);
+        behandling.setAktiv(setAktiv(id));
         behandling.setFormal("test formal");
         behandling.setBehandlingsgrunnlagIds(List.of(1));
         behandling.setPersonopplysningIds(List.of(1, 2, 3));
         behandling.setTjenesteIds(List.of(1, 2, 3));
         return behandling;
+    }
+
+    private Boolean setAktiv(int id) {
+        return id == 2;
     }
 
     public List<Behandling> getBehandlingList() {
