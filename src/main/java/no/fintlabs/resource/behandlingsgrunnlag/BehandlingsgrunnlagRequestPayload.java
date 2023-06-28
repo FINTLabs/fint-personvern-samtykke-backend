@@ -1,6 +1,9 @@
 package no.fintlabs.resource.behandlingsgrunnlag;
 
-public class BehandlingsgrunnlagRequestData {
-    private String code;
+import lombok.Data;
+
+@Data
+public class BehandlingsgrunnlagRequestPayload {
     private String name;
+    private String code;
 }

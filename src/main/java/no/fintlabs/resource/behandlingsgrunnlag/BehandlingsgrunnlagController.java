@@ -2,9 +2,7 @@ package no.fintlabs.resource.behandlingsgrunnlag;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,6 +17,13 @@ public class BehandlingsgrunnlagController {
     @GetMapping
     public ResponseEntity<List<Behandlingsgrunnlag>> getBehandlinger() {
         return ResponseEntity.ok(behandlingsgrunnlagTestData.getList());
+    }
+
+    @PostMapping
+    public ResponseEntity<Behandlingsgrunnlag> createBehandlingsgrunnlag(
+            @RequestBody BehandlingsgrunnlagRequestPayload requestPayload) {
+        return ResponseEntity.ok(behandlingsgrunnlagTestData.createBehandlingsgrunnlag(
+                requestPayload.getCode(), requestPayload.getName()));
     }
 
 }
