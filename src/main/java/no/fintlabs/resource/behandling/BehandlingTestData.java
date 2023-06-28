@@ -56,9 +56,8 @@ public class BehandlingTestData {
         return behandling;
     }
 
-    public Behandling createBehandling(BehandlingRequestPayload requestPayload, Jwt jwt) {
+    public Behandling createBehandling(BehandlingRequestPayload requestPayload) {
         Behandling behandling = new Behandling();
-        String personopplysningId = (String) jwt.getClaims().get("tenantid");
         String systemId = UUID.randomUUID().toString();
 
         behandling.setId(systemId);
@@ -66,7 +65,7 @@ public class BehandlingTestData {
         behandling.setFormal(requestPayload.getFormal());
         behandling.setTjenesteIds(List.of(requestPayload.getTjenesteId()));
         behandling.setBehandlingsgrunnlagIds(List.of(requestPayload.getBehandlingsgrunnlagId()));
-        behandling.setPersonopplysningIds(List.of(personopplysningId));
+        behandling.setPersonopplysningIds(List.of(requestPayload.getPersonopplysningId()));
 
         behandlingMap.put(systemId, behandling);
         return behandling;

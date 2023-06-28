@@ -10,4 +10,5 @@ public class BehandlingRequestPayload {
 
     private String behandlingsgrunnlagId;
     private String tjenesteId;
+    private String personopplysningId;
 }

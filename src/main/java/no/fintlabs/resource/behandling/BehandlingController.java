@@ -31,9 +31,8 @@ public class BehandlingController {
     }
 
     @PostMapping
-    public ResponseEntity<Behandling> createBehandling(@RequestBody BehandlingRequestPayload requestPayload,
-                                                       @AuthenticationPrincipal Jwt jwt) {
-        return ResponseEntity.ok(behandlingTestData.createBehandling(requestPayload, jwt));
+    public ResponseEntity<Behandling> createBehandling(@RequestBody BehandlingRequestPayload requestPayload) {
+        return ResponseEntity.ok(behandlingTestData.createBehandling(requestPayload));
     }
 
 }
