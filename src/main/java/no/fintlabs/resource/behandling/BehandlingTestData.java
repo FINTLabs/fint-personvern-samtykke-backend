@@ -3,15 +3,17 @@ package no.fintlabs.resource.behandling;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BehandlingTestData {
 
-    private final List<Behandling> behandlingList;
+    private final Map<Integer, Behandling> behandlingMap;
 
     public BehandlingTestData() {
-        this.behandlingList = new ArrayList<>();
+        this.behandlingMap = new HashMap<>();
         addTestData();
 
     }
@@ -19,7 +21,7 @@ public class BehandlingTestData {
     private void addTestData() {
         for (int i = 1; i < 4; i++) {
             Behandling behandling = createBehandling(i);
-            behandlingList.add(behandling);
+            behandlingMap.put(behandling.getId(), behandling);
         }
     }
 
@@ -38,12 +40,21 @@ public class BehandlingTestData {
         return id == 2;
     }
 
-    public List<Behandling> getBehandlingList() {
-        return behandlingList;
+    public List<Behandling> getBehandlingMap() {
+        return new ArrayList<>(behandlingMap.values());
     }
 
     public void addBehandling(Behandling behandling) {
-        behandlingList.add(behandling);
+        behandlingMap.put(behandling.getId(), behandling);
     }
 
+    public boolean exists(int systemId) {
+        return behandlingMap.containsKey(systemId);
+    }
+
+    public Behandling updateBehandling(int systemId, boolean aktiv) {
+        Behandling behandling = behandlingMap.get(systemId);
+        behandling.setAktiv(aktiv);
+        return behandling;
+    }
 }
