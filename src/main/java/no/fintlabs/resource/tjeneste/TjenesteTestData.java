@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TjenesteTestData {
@@ -25,7 +26,7 @@ public class TjenesteTestData {
 
     private Tjeneste createTjeneste(int id) {
         Tjeneste tjeneste = new Tjeneste();
-        tjeneste.setId(id);
+        tjeneste.setId(String.valueOf(id));
         tjeneste.setNavn(setName(id));
         tjeneste.setBehandlingIds(setBehandlingIds(id));
         return tjeneste;
@@ -55,4 +56,10 @@ public class TjenesteTestData {
         tjenesteList.add(resource);
     }
 
+    public Tjeneste createTjeneste(String name) {
+        Tjeneste tjeneste = new Tjeneste();
+        tjeneste.setId(UUID.randomUUID().toString());
+        tjeneste.setNavn(name);
+        return tjeneste;
+    }
 }
