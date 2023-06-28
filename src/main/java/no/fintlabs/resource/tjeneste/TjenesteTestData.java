@@ -58,8 +58,11 @@ public class TjenesteTestData {
 
     public Tjeneste createTjeneste(String name) {
         Tjeneste tjeneste = new Tjeneste();
+
         tjeneste.setId(UUID.randomUUID().toString());
         tjeneste.setNavn(name);
+
+        tjenesteList.add(tjeneste);
         return tjeneste;
     }
 }
