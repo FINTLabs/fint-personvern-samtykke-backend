@@ -26,17 +26,19 @@ public class TjenesteTestData {
 
     private Tjeneste createTjeneste(int id) {
         Tjeneste tjeneste = new Tjeneste();
+
         tjeneste.setId(String.valueOf(id));
         tjeneste.setNavn(setName(id));
         tjeneste.setBehandlingIds(setBehandlingIds(id));
+
         return tjeneste;
     }
 
-    private List<Integer> setBehandlingIds(int id) {
+    private List<String> setBehandlingIds(int id) {
         return switch (id) {
-            case 1 -> List.of(1, 2);
-            case 2 -> List.of(3);
-            default -> List.of(1);
+            case 1 -> List.of("1", "2");
+            case 2 -> List.of("3");
+            default -> List.of("1");
         };
     }
 

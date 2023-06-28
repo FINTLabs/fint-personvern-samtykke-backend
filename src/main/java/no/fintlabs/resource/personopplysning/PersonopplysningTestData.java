@@ -25,7 +25,7 @@ public class PersonopplysningTestData {
 
     private Personopplysning createPersonopplysning(int id) {
         Personopplysning personopplysning = new Personopplysning();
-        personopplysning.setId(id);
+        personopplysning.setId(String.valueOf(id));
         personopplysning.setKode(setKode(id));
         personopplysning.setNavn("test data");
         return personopplysning;

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Personopplysning {
 
-    private int id;
+    private String id;
     private String kode;
     private String navn;
 

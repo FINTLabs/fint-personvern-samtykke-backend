@@ -9,6 +9,6 @@ public class Tjeneste {
 
     private String id;
     private String navn;
-    private List<Integer> behandlingIds;
+    private List<String> behandlingIds;
 
 }
