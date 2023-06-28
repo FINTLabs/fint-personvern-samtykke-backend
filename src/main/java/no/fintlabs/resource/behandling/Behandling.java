@@ -7,11 +7,11 @@ import java.util.List;
 @Data
 public class Behandling {
 
-    private int id;
+    private String id;
     private Boolean aktiv;
     private String formal;
-    private List<Integer> behandlingsgrunnlagIds;
-    private List<Integer> personopplysningIds;
-    private List<Integer> tjenesteIds;
+    private List<String> behandlingsgrunnlagIds;
+    private List<String> personopplysningIds;
+    private List<String> tjenesteIds;
 
 }

@@ -1,16 +1,14 @@
 package no.fintlabs.resource.behandling;
 
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class BehandlingTestData {
 
-    private final Map<Integer, Behandling> behandlingMap;
+    private final Map<String, Behandling> behandlingMap;
 
     public BehandlingTestData() {
         this.behandlingMap = new HashMap<>();
@@ -27,12 +25,12 @@ public class BehandlingTestData {
 
     private Behandling createBehandling(int id) {
         Behandling behandling = new Behandling();
-        behandling.setId(id);
+        behandling.setId(String.valueOf(id));
         behandling.setAktiv(setAktiv(id));
         behandling.setFormal("test formal");
-        behandling.setBehandlingsgrunnlagIds(List.of(1));
-        behandling.setPersonopplysningIds(List.of(1, 2, 3));
-        behandling.setTjenesteIds(List.of(1, 2, 3));
+        behandling.setBehandlingsgrunnlagIds(List.of("1"));
+        behandling.setPersonopplysningIds(List.of("1", "2", "3"));
+        behandling.setTjenesteIds(List.of("1", "2", "3"));
         return behandling;
     }
 
@@ -48,13 +46,29 @@ public class BehandlingTestData {
         behandlingMap.put(behandling.getId(), behandling);
     }
 
-    public boolean exists(int systemId) {
+    public boolean exists(String systemId) {
         return behandlingMap.containsKey(systemId);
     }
 
-    public Behandling updateBehandling(int systemId, boolean aktiv) {
+    public Behandling updateBehandling(String systemId, boolean aktiv) {
         Behandling behandling = behandlingMap.get(systemId);
         behandling.setAktiv(aktiv);
+        return behandling;
+    }
+
+    public Behandling createBehandling(BehandlingRequestPayload requestPayload, Jwt jwt) {
+        Behandling behandling = new Behandling();
+        String personopplysningId = (String) jwt.getClaims().get("tenantid");
+        String systemId = UUID.randomUUID().toString();
+
+        behandling.setId(systemId);
+        behandling.setAktiv(requestPayload.getAktiv());
+        behandling.setFormal(requestPayload.getFormal());
+        behandling.setTjenesteIds(List.of(requestPayload.getTjenesteId()));
+        behandling.setBehandlingsgrunnlagIds(List.of(requestPayload.getBehandlingsgrunnlagId()));
+        behandling.setPersonopplysningIds(List.of(personopplysningId));
+
+        behandlingMap.put(systemId, behandling);
         return behandling;
     }
 }
