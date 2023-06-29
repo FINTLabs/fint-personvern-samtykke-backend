@@ -23,7 +23,7 @@ public class BehandlingsgrunnlagController {
     public ResponseEntity<Behandlingsgrunnlag> createBehandlingsgrunnlag(
             @RequestBody BehandlingsgrunnlagRequestPayload requestPayload) {
         return ResponseEntity.ok(behandlingsgrunnlagTestData.createBehandlingsgrunnlag(
-                requestPayload.getCode(), requestPayload.getName()));
+                requestPayload.getKode(), requestPayload.getName()));
     }
 
 }
