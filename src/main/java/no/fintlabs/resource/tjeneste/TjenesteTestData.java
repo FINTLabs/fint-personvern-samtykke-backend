@@ -2,17 +2,15 @@ package no.fintlabs.resource.tjeneste;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class TjenesteTestData {
 
-    private final List<Tjeneste> tjenesteList;
+    private final Map<String, Tjeneste> tjenesteMap;
 
     public TjenesteTestData() {
-        this.tjenesteList = new ArrayList<>();
+        this.tjenesteMap = new HashMap<>();
         addTestData();
 
     }
@@ -20,7 +18,7 @@ public class TjenesteTestData {
     private void addTestData() {
         for (int i = 1; i < 3; i++) {
             Tjeneste tjeneste = createTjeneste(i);
-            tjenesteList.add(tjeneste);
+            tjenesteMap.put(tjeneste.getId(), tjeneste);
         }
     }
 
@@ -51,11 +49,11 @@ public class TjenesteTestData {
     }
 
     public List<Tjeneste> getList() {
-        return tjenesteList;
+        return new ArrayList<>(tjenesteMap.values());
     }
 
     public void addResource(Tjeneste resource) {
-        tjenesteList.add(resource);
+        tjenesteMap.put(resource.getId(), resource);
     }
 
     public Tjeneste createTjeneste(String name) {
@@ -65,7 +63,15 @@ public class TjenesteTestData {
         tjeneste.setNavn(name);
         tjeneste.setBehandlingIds(new ArrayList<>());
 
-        tjenesteList.add(tjeneste);
+        tjenesteMap.put(tjeneste.getId(), tjeneste);
         return tjeneste;
+    }
+
+    public Tjeneste getTjeneste(String systemId) {
+        return tjenesteMap.get(systemId);
+    }
+
+    public void updateTjeneste(String systemId, Tjeneste tjeneste) {
+        tjenesteMap.put(systemId, tjeneste);
     }
 }

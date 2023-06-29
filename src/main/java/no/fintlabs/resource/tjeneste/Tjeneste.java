@@ -11,4 +11,8 @@ public class Tjeneste {
     private String navn;
     private List<String> behandlingIds;
 
+    public void addBehandlingId(String behandlingId) {
+        behandlingIds.add(behandlingId);
+    }
+
 }
