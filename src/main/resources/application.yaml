@@ -6,6 +6,10 @@ spring:
       - kafka
       - oauth
 
+springdoc:
+  swagger-ui:
+    path: /swagger
+
 logging:
   level:
     org.apache.kafka: OFF

@@ -38,6 +38,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.89.Final:osx-aarch_64'
+    implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.6.14'
 
     implementation 'no.fintlabs:fint-kafka:2.4.0'
     implementation "no.fint:fint-personvern-resource-model-java:${apiVersion}"
