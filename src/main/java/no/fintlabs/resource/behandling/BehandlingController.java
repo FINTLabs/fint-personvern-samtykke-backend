@@ -20,8 +20,8 @@ public class BehandlingController {
     }
 
     @PutMapping("/{systemId}/{aktiv}")
-    public ResponseEntity<Behandling> updateBehandling(@RequestParam String systemId,
-                                                       @RequestParam boolean aktiv) {
+    public ResponseEntity<Behandling> updateBehandling(@PathVariable String systemId,
+                                                       @PathVariable boolean aktiv) {
         if (behandlingTestData.exists(systemId)) {
             return ResponseEntity.ok(behandlingTestData.updateBehandling(systemId, aktiv));
         }
