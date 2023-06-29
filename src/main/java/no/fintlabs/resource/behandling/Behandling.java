@@ -1,17 +1,17 @@
 package no.fintlabs.resource.behandling;
 
+import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-
+@Builder
 @Data
 public class Behandling {
 
     private String id;
     private Boolean aktiv;
     private String formal;
-    private List<String> behandlingsgrunnlagIds;
-    private List<String> personopplysningIds;
-    private List<String> tjenesteIds;
+    private String behandlingsgrunnlagId;
+    private String personopplysningId;
+    private String tjenesteId;
 
 }

@@ -1,6 +1,7 @@
 package no.fintlabs.resource.behandling;
 
-import org.springframework.security.oauth2.jwt.Jwt;
+import no.fintlabs.resource.tjeneste.Tjeneste;
+import no.fintlabs.resource.tjeneste.TjenesteTestData;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -9,8 +10,10 @@ import java.util.*;
 public class BehandlingTestData {
 
     private final Map<String, Behandling> behandlingMap;
+    private final TjenesteTestData tjenesteTestData;
 
-    public BehandlingTestData() {
+    public BehandlingTestData(TjenesteTestData tjenesteTestData) {
+        this.tjenesteTestData = tjenesteTestData;
         this.behandlingMap = new HashMap<>();
         addTestData();
 
@@ -24,14 +27,14 @@ public class BehandlingTestData {
     }
 
     private Behandling createBehandling(int id) {
-        Behandling behandling = new Behandling();
-        behandling.setId(String.valueOf(id));
-        behandling.setAktiv(setAktiv(id));
-        behandling.setFormal("test formal");
-        behandling.setBehandlingsgrunnlagIds(List.of("1"));
-        behandling.setPersonopplysningIds(List.of("1", "2", "3"));
-        behandling.setTjenesteIds(List.of("1", "2", "3"));
-        return behandling;
+        return Behandling.builder()
+                .id(String.valueOf(id))
+                .aktiv(setAktiv(id))
+                .formal("test")
+                .behandlingsgrunnlagId("1")
+                .personopplysningId("1")
+                .tjenesteId("1")
+                .build();
     }
 
     private Boolean setAktiv(int id) {
@@ -57,17 +60,29 @@ public class BehandlingTestData {
     }
 
     public Behandling createBehandling(BehandlingRequestPayload requestPayload) {
-        Behandling behandling = new Behandling();
-        String systemId = UUID.randomUUID().toString();
+        String behandlingId = UUID.randomUUID().toString();
+        String tjenesteId = requestPayload.getTjenesteId();
 
-        behandling.setId(systemId);
-        behandling.setAktiv(requestPayload.getAktiv());
-        behandling.setFormal(requestPayload.getFormal());
-        behandling.setTjenesteIds(List.of(requestPayload.getTjenesteId()));
-        behandling.setBehandlingsgrunnlagIds(List.of(requestPayload.getBehandlingsgrunnlagId()));
-        behandling.setPersonopplysningIds(List.of(requestPayload.getPersonopplysningId()));
+        Behandling behandling = createBehandling(requestPayload, behandlingId);
+        updateTjenesteId(tjenesteId, behandlingId);
+        behandlingMap.put(behandlingId, behandling);
 
-        behandlingMap.put(systemId, behandling);
         return behandling;
+    }
+
+    private Behandling createBehandling(BehandlingRequestPayload requestPayload, String behandlingId) {
+        return Behandling.builder()
+                .id(behandlingId)
+                .aktiv(requestPayload.getAktiv())
+                .formal(requestPayload.getFormal())
+                .behandlingsgrunnlagId(requestPayload.getBehandlingsgrunnlagId())
+                .personopplysningId(requestPayload.getPersonopplysningId())
+                .tjenesteId(requestPayload.getTjenesteId())
+                .build();
+    }
+
+    private void updateTjenesteId(String tjenesteId, String behandlingId) {
+        Tjeneste tjeneste = tjenesteTestData.getTjeneste(tjenesteId);
+        tjeneste.addBehandlingId(behandlingId);
     }
 }
