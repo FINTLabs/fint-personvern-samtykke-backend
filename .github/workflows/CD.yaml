@@ -3,6 +3,8 @@ name: CD
 on:
   repository_dispatch:
     types: [trigger-cd]
+  push:
+    branches: ['local-testing']
 
 env:
   REGISTRY: ghcr.io
