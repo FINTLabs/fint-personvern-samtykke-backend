@@ -7,6 +7,7 @@ spring:
 
 fint:
   kafka:
+    enable-ssl: true
     application-id: samtykke-admin-backend
     topic:
       domain-context: fint-core
