@@ -28,7 +28,7 @@ public class BehandlingKafkaConsumer {
                         .builder()
                         .orgId(FormattedTopicComponentPattern.any())
                         .domainContext(FormattedTopicComponentPattern.anyOf("fint-core"))
-                        .resource(FormattedTopicComponentPattern.anyOf("personvern-samtykke-behandling"))
+                        .resource(FormattedTopicComponentPattern.containing("personvern-samtykke-behandling"))
                         .build()
         );
     }
