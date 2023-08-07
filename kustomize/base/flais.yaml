@@ -21,8 +21,8 @@ spec:
   kafka:
     enabled: true
     acls:
-      - permission: admin
-      - topic: '*.fint-core.*'
+      - permission: read
+        topic: '*.fint-core.entity.personvern-*'
   url:
     hostname: replaceUrl
     basePath: /api/samtykke
