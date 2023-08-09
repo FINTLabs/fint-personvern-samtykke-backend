@@ -22,5 +22,4 @@ public class TjenesteController {
     public ResponseEntity<List<Tjeneste>> getTjenesteResources(@PathVariable String orgName) {
         return ResponseEntity.ok(tjenesteService.getTjenester(orgName));
     }
-
 }

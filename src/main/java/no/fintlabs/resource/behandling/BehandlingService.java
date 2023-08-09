@@ -1,9 +1,10 @@
 package no.fintlabs.resource.behandling;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 import no.fintlabs.utils.FintUtils;
+import no.fintlabs.utils.OrgIdUtil;
+import no.fintlabs.utils.ResourceCollection;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,18 +16,18 @@ import java.util.Map;
 @Service
 public class BehandlingService {
 
-    private final Map<String, BehandlingResource> behandlingResources;
+    private final ResourceCollection<BehandlingResource> behandlingResources;
     private final FintUtils fintUtils;
 
     public BehandlingService(FintUtils fintUtils) {
         this.fintUtils = fintUtils;
-        behandlingResources = new HashMap<>();
+        behandlingResources = new ResourceCollection<>();
     }
 
-    public List<Behandling> getBehandlinger() {
+    public List<Behandling> getBehandlinger(String orgName) {
         List<Behandling> behandlinger = new ArrayList<>();
 
-        behandlingResources.values().forEach(behandlingResource -> {
+        behandlingResources.getResources(OrgIdUtil.uniform(orgName)).forEach(behandlingResource -> {
             Behandling behandling = createBehandlingResource(behandlingResource);
             behandlinger.add(behandling);
         });
@@ -48,9 +49,10 @@ public class BehandlingService {
         return behandling;
     }
 
-    public void addResource(BehandlingResource resource) {
+    public void addResource(String orgId, BehandlingResource resource) {
+
         log.info("Received behandling for: " + resource.getSystemId().getIdentifikatorverdi());
-        behandlingResources.put(resource.getSystemId().getIdentifikatorverdi(), resource);
+        behandlingResources.put(OrgIdUtil.uniform(orgId), resource.getSystemId().getIdentifikatorverdi(), resource);
     }
 
 }

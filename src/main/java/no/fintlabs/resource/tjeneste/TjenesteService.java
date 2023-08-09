@@ -3,29 +3,28 @@ package no.fintlabs.resource.tjeneste;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.samtykke.TjenesteResource;
 import no.fintlabs.utils.FintUtils;
+import no.fintlabs.utils.OrgIdUtil;
+import no.fintlabs.utils.ResourceCollection;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
 public class TjenesteService {
 
-    private final Map<String, TjenesteResource> tjenesteResources;
+    private final ResourceCollection<TjenesteResource> tjenesteResources;
     private final FintUtils fintUtils;
 
     public TjenesteService(FintUtils fintUtils) {
         this.fintUtils = fintUtils;
-        tjenesteResources = new HashMap<>();
+        tjenesteResources = new ResourceCollection<>();
     }
 
     public List<Tjeneste> getTjenester(String orgName) {
         List<Tjeneste> tjenester = new ArrayList<>();
 
-        tjenesteResources.values().forEach(resource -> {
+        tjenesteResources.getResources(OrgIdUtil.uniform(orgName)).forEach(resource -> {
             Tjeneste tjeneste = createTjeneste(resource);
             tjenester.add(tjeneste);
         });
@@ -43,8 +42,8 @@ public class TjenesteService {
         return tjeneste;
     }
 
-    public void addResource(TjenesteResource resource) {
+    public void addResource(String orgId, TjenesteResource resource) {
         log.info("Received tjeneste for: " + resource.getSystemId().getIdentifikatorverdi());
-        tjenesteResources.put(resource.getSystemId().getIdentifikatorverdi(), resource);
+        tjenesteResources.put(OrgIdUtil.uniform(orgId), resource.getSystemId().getIdentifikatorverdi(), resource);
     }
 }

@@ -7,6 +7,7 @@ import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 import no.fintlabs.kafka.common.topic.pattern.FormattedTopicComponentPattern;
 import no.fintlabs.kafka.entity.EntityConsumerFactoryService;
 import no.fintlabs.kafka.entity.topic.EntityTopicNamePatternParameters;
+import no.fintlabs.utils.OrgIdUtil;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.stereotype.Service;
 
@@ -37,8 +38,6 @@ public class BehandlingKafkaConsumer {
     }
 
     private void processEntity(ConsumerRecord<String, BehandlingResource> resource) {
-        log.info("Headers: " + resource.headers().toString());
-        behandlingService.addResource(resource.value());
+        behandlingService.addResource(OrgIdUtil.getFromTopic(resource.topic()), resource.value());
     }
-
 }

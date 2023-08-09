@@ -1,6 +1,5 @@
 package no.fintlabs.resource.behandlingsgrunnlag;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.kodeverk.BehandlingsgrunnlagResource;
 import org.springframework.stereotype.Service;
@@ -45,5 +44,4 @@ public class BehandlingsgrunnlagService {
         log.info("Received behandlingsgrunnlag for: " + resource.getSystemId().getIdentifikatorverdi());
         behandlingsgrunnlagResources.put(resource.getSystemId().getIdentifikatorverdi(), resource);
     }
-
 }
