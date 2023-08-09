@@ -6,19 +6,24 @@ import no.fint.model.resource.personvern.kodeverk.BehandlingsgrunnlagResource;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class BehandlingsgrunnlagService {
 
-    private final List<BehandlingsgrunnlagResource> behandlingsgrunnlagResources;
+    private final Map<String, BehandlingsgrunnlagResource> behandlingsgrunnlagResources;
+
+    public BehandlingsgrunnlagService() {
+        behandlingsgrunnlagResources = new HashMap<>();
+    }
 
     public List<Behandlingsgrunnlag> getBehandlingsgrunnlags() {
         List<Behandlingsgrunnlag> behandlingsgrunnlags = new ArrayList<>();
 
-        behandlingsgrunnlagResources.forEach(resource -> {
+        behandlingsgrunnlagResources.values().forEach(resource -> {
             Behandlingsgrunnlag behandlingsgrunnlag = createBehandlingsgrunnlag(resource);
             behandlingsgrunnlags.add(behandlingsgrunnlag);
         });
@@ -37,8 +42,8 @@ public class BehandlingsgrunnlagService {
     }
 
     public void addResource(BehandlingsgrunnlagResource resource) {
-        log.info(resource.toString());
-        behandlingsgrunnlagResources.add(resource);
+        log.info("Received behandlingsgrunnlag for: "+ resource.getSystemId().getIdentifikatorverdi());
+        behandlingsgrunnlagResources.put(resource.getSystemId().getIdentifikatorverdi(),resource);
     }
 
 }

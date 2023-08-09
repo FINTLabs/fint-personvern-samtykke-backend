@@ -7,20 +7,26 @@ import no.fintlabs.utils.FintUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class BehandlingService {
 
-    private final List<BehandlingResource> behandlingResources;
+    private final Map<String, BehandlingResource> behandlingResources;
     private final FintUtils fintUtils;
+
+    public BehandlingService(FintUtils fintUtils) {
+        this.fintUtils = fintUtils;
+        behandlingResources = new HashMap<>();
+    }
 
     public List<Behandling> getBehandlinger() {
         List<Behandling> behandlinger = new ArrayList<>();
 
-        behandlingResources.forEach(behandlingResource -> {
+        behandlingResources.values().forEach(behandlingResource -> {
             Behandling behandling = createBehandlingResource(behandlingResource);
             behandlinger.add(behandling);
         });
@@ -43,8 +49,8 @@ public class BehandlingService {
     }
 
     public void addResource(BehandlingResource resource) {
-        log.info(resource.toString());
-        behandlingResources.add(resource);
+        log.info("Received behandling for: "+ resource.getSystemId().getIdentifikatorverdi());
+        behandlingResources.put(resource.getSystemId().getIdentifikatorverdi(),resource);
     }
 
 }
