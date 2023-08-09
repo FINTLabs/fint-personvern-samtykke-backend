@@ -2,6 +2,7 @@ package no.fintlabs.resource.tjeneste;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +19,8 @@ public class TjenesteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Tjeneste>> getTjenesteResources() {
-        return ResponseEntity.ok(tjenesteService.getTjenester());
+    public ResponseEntity<List<Tjeneste>> getTjenesteResources(@PathVariable String orgName) {
+        return ResponseEntity.ok(tjenesteService.getTjenester(orgName));
     }
 
 }

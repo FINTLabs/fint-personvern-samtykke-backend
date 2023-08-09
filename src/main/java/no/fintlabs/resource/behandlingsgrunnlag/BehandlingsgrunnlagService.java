@@ -42,8 +42,8 @@ public class BehandlingsgrunnlagService {
     }
 
     public void addResource(BehandlingsgrunnlagResource resource) {
-        log.info("Received behandlingsgrunnlag for: "+ resource.getSystemId().getIdentifikatorverdi());
-        behandlingsgrunnlagResources.put(resource.getSystemId().getIdentifikatorverdi(),resource);
+        log.info("Received behandlingsgrunnlag for: " + resource.getSystemId().getIdentifikatorverdi());
+        behandlingsgrunnlagResources.put(resource.getSystemId().getIdentifikatorverdi(), resource);
     }
 
 }

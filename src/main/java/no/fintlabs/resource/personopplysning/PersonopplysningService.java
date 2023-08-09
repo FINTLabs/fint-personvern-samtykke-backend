@@ -1,8 +1,6 @@
 package no.fintlabs.resource.personopplysning;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.felles.Person;
 import no.fint.model.resource.personvern.kodeverk.PersonopplysningResource;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +42,7 @@ public class PersonopplysningService {
     }
 
     public void addResource(PersonopplysningResource resource) {
-        log.info("Received personopplysnings for: "+ resource.getSystemId().getIdentifikatorverdi());
-        personopplysningResources.put(resource.getSystemId().getIdentifikatorverdi(),resource);
+        log.info("Received personopplysnings for: " + resource.getSystemId().getIdentifikatorverdi());
+        personopplysningResources.put(resource.getSystemId().getIdentifikatorverdi(), resource);
     }
 }

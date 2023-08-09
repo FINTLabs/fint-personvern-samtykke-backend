@@ -6,6 +6,7 @@ import no.fint.model.resource.personvern.samtykke.TjenesteResource;
 import no.fintlabs.kafka.common.topic.pattern.FormattedTopicComponentPattern;
 import no.fintlabs.kafka.entity.EntityConsumerFactoryService;
 import no.fintlabs.kafka.entity.topic.EntityTopicNamePatternParameters;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -22,7 +23,7 @@ public class TjenesteKafkaConsumer {
     private void setupConsumer() {
         entityConsumerFactoryService.createFactory(
                 TjenesteResource.class,
-                consumerRecord -> processEntity(consumerRecord.value())
+                consumerRecord -> processEntity(consumerRecord)
         ).createContainer(
                 EntityTopicNamePatternParameters
                         .builder()
@@ -33,8 +34,8 @@ public class TjenesteKafkaConsumer {
         );
     }
 
-    private void processEntity(TjenesteResource resource) {
-        tjenesteService.addResource(resource);
+    private void processEntity(ConsumerRecord<String, TjenesteResource> resource) {
+        tjenesteService.addResource(resource.value());
     }
 
 }

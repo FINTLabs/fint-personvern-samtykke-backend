@@ -1,6 +1,5 @@
 package no.fintlabs.resource.tjeneste;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.samtykke.TjenesteResource;
 import no.fintlabs.utils.FintUtils;
@@ -23,7 +22,7 @@ public class TjenesteService {
         tjenesteResources = new HashMap<>();
     }
 
-    public List<Tjeneste> getTjenester() {
+    public List<Tjeneste> getTjenester(String orgName) {
         List<Tjeneste> tjenester = new ArrayList<>();
 
         tjenesteResources.values().forEach(resource -> {
@@ -45,7 +44,7 @@ public class TjenesteService {
     }
 
     public void addResource(TjenesteResource resource) {
-        log.info("Received tjeneste for: "+ resource.getSystemId().getIdentifikatorverdi());
+        log.info("Received tjeneste for: " + resource.getSystemId().getIdentifikatorverdi());
         tjenesteResources.put(resource.getSystemId().getIdentifikatorverdi(), resource);
     }
 }

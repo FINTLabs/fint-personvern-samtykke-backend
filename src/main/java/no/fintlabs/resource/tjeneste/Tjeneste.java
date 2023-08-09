@@ -8,6 +8,7 @@ import java.util.List;
 public class Tjeneste {
 
     private String id;
+    private String orgId;
     private String navn;
     private List<String> behandlingIds;
 
