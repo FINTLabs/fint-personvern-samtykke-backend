@@ -16,7 +16,7 @@ public class BehandlingController {
 
     private final BehandlingService behandlingService;
 
-    @GetMapping
+    @GetMapping("/{orgName}")
     public ResponseEntity<List<Behandling>> getBehandlinger(@PathVariable String orgName) {
         return ResponseEntity.ok(behandlingService.getBehandlinger(orgName));
     }

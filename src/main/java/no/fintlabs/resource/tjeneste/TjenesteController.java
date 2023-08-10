@@ -18,7 +18,7 @@ public class TjenesteController {
         this.tjenesteService = tjenesteService;
     }
 
-    @GetMapping
+    @GetMapping("/{orgName}")
     public ResponseEntity<List<Tjeneste>> getTjenesteResources(@PathVariable String orgName) {
         return ResponseEntity.ok(tjenesteService.getTjenester(orgName));
     }
