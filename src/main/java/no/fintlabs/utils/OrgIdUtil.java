@@ -9,4 +9,8 @@ public class OrgIdUtil {
     public static String uniform(String orgId){
         return orgId.replace("-", "_");
     }
+
+    public static String uniformForKafka(String orgId){
+        return orgId.replace("_", "-");
+    }
 }
