@@ -17,8 +17,6 @@ public class SecurityConfiguration {
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
                 .authorizeExchange((authorize) -> authorize
-                        .pathMatchers("/**")
-                        .hasRole("authenticated")
                         .anyExchange()
                         .authenticated()
                 )
