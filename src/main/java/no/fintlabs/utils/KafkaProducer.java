@@ -9,19 +9,20 @@ import no.fintlabs.kafka.event.EventProducerFactory;
 import no.fintlabs.kafka.event.EventProducerRecord;
 import no.fintlabs.kafka.event.topic.EventTopicNameParameters;
 import no.fintlabs.kafka.event.topic.EventTopicService;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-public abstract class KafkaProducer {
+@Service
+public class KafkaProducer {
 
     private static final int RETENTION_TIME_MS = 172800000;
 
     private final EventProducer<Object> eventProducer;
 
-
     private final EventTopicService eventTopicService;
 
-    public KafkaProducer(EventProducerFactory eventProducerFactory, EventTopicService eventTopicService, String resourceName) {
+    public KafkaProducer(EventProducerFactory eventProducerFactory, EventTopicService eventTopicService) {
         this.eventProducer = eventProducerFactory.createProducer(Object.class);
         this.eventTopicService = eventTopicService;
     }
