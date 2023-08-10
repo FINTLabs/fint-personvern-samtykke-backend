@@ -41,6 +41,7 @@ dependencies {
 
     implementation 'no.fintlabs:fint-kafka:2.4.0'
     implementation "no.fint:fint-personvern-resource-model-java:${apiVersion}"
+    implementation "no.fintlabs:fint-core-infra-models:1.1.2"
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'

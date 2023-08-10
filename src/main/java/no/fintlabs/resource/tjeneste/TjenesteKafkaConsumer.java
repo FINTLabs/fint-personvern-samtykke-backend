@@ -2,6 +2,7 @@ package no.fintlabs.resource.tjeneste;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.samtykke.TjenesteResource;
 import no.fintlabs.kafka.common.topic.pattern.FormattedTopicComponentPattern;
 import no.fintlabs.kafka.entity.EntityConsumerFactoryService;
@@ -11,7 +12,9 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
 
+@Slf4j
 @RequiredArgsConstructor
 @Getter
 @Service
@@ -36,7 +39,12 @@ public class TjenesteKafkaConsumer {
     }
 
     private void processEntity(ConsumerRecord<String, TjenesteResource> resource) {
-        tjenesteService.addResource(OrgIdUtil.getFromTopic(resource.topic()), resource.value());
+        String corrId = null;
+        if (resource.headers().lastHeader("event-corr-id") != null){
+            corrId = new String(resource.headers().lastHeader("event-corr-id").value(), StandardCharsets.UTF_8);
+            log.debug("Adding corrId to EntityResponseCache: {}", corrId);
+        }
+        tjenesteService.addResource(OrgIdUtil.getFromTopic(resource.topic()), resource.value(), corrId);
     }
 
 }
