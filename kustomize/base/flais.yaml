@@ -22,7 +22,7 @@ spec:
     enabled: true
     acls:
       - permission: read
-        topic: '*.fint-core.entity.personvern-*'
+        topic: '*.fint-core.*.personvern-*'
   url:
     hostname: replaceUrl
     basePath: /api/samtykke
