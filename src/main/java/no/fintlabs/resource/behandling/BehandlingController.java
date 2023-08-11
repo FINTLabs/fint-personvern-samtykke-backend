@@ -27,7 +27,7 @@ public class BehandlingController {
         return ResponseEntity.created(LocationHeader.get(corrId, request)).build();
     }
 
-    @GetMapping("/status/corrId")
+    @GetMapping("/status/{corrId}")
     public ResponseEntity<Void> status(@PathVariable String corrId) {
         return behandlingService.status(corrId) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.PROCESSING).build();
     }

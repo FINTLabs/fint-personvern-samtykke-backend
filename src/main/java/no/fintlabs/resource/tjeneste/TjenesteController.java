@@ -1,5 +1,6 @@
 package no.fintlabs.resource.tjeneste;
 
+import lombok.extern.slf4j.Slf4j;
 import no.fintlabs.utils.LocationHeader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RequestMapping("/tjeneste")
 @RestController
+@Slf4j
 public class TjenesteController {
 
     private final TjenesteService tjenesteService;
@@ -31,6 +33,7 @@ public class TjenesteController {
 
     @GetMapping("/status/{corrId}")
     public ResponseEntity<Void> status(@PathVariable String corrId) {
+        log.info("Finding status for corrId: " + corrId);
         return tjenesteService.status(corrId) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.PROCESSING).build();
     }
 }
