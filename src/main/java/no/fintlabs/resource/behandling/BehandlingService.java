@@ -1,11 +1,13 @@
 package no.fintlabs.resource.behandling;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 import no.fintlabs.adapter.models.OperationType;
 import no.fintlabs.adapter.models.RequestFintEvent;
-import no.fintlabs.utils.*;
+import no.fintlabs.utils.EventStatusService;
+import no.fintlabs.utils.KafkaProducer;
+import no.fintlabs.utils.OrgIdUtil;
+import no.fintlabs.utils.ResourceCollection;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,12 +18,10 @@ import java.util.List;
 public class BehandlingService {
 
     private final ResourceCollection<BehandlingResource> behandlingResources;
-    private final FintUtils fintUtils;
     private final KafkaProducer kafkaProducer;
     private final EventStatusService eventStatusService;
 
-    public BehandlingService(FintUtils fintUtils, KafkaProducer kafkaProducer, EventStatusService eventStatusService) {
-        this.fintUtils = fintUtils;
+    public BehandlingService(KafkaProducer kafkaProducer, EventStatusService eventStatusService) {
         this.kafkaProducer = kafkaProducer;
         this.eventStatusService = eventStatusService;
         behandlingResources = new ResourceCollection<>();
@@ -31,34 +31,11 @@ public class BehandlingService {
         List<Behandling> behandlinger = new ArrayList<>();
 
         behandlingResources.getResources(OrgIdUtil.uniform(orgName)).forEach(behandlingResource -> {
-            Behandling behandling = createBehandling(behandlingResource);
+            Behandling behandling = BehandlingMapper.createBehandling(behandlingResource);
             behandlinger.add(behandling);
         });
 
         return behandlinger;
-    }
-
-    private Behandling createBehandling(BehandlingResource behandlingResource) {
-        Behandling behandling = new Behandling();
-
-        behandling.setId(behandlingResource.getSystemId().getIdentifikatorverdi());
-        behandling.setAktiv(behandlingResource.getAktiv());
-        behandling.setFormal(behandlingResource.getFormal());
-
-        behandling.setTjenesteIds(fintUtils.getRelationIdsFromLinks(behandlingResource, "tjeneste"));
-        behandling.setPersonopplysningIds(fintUtils.getRelationIdsFromLinks(behandlingResource, "personopplysning"));
-        behandling.setBehandlingsgrunnlagIds(fintUtils.getRelationIdsFromLinks(behandlingResource, "behandlingsgrunnlag"));
-
-        return behandling;
-    }
-
-    private BehandlingResource createBehandlingResource(Behandling behandling) {
-        BehandlingResource behandlingResource = new BehandlingResource();
-        Identifikator identifikator = new Identifikator();
-        identifikator.setIdentifikatorverdi(behandling.getId());
-        behandlingResource.setFormal(behandling.getFormal());
-
-        return behandlingResource;
     }
 
     public void addResource(String orgId, BehandlingResource resource) {
@@ -68,7 +45,7 @@ public class BehandlingService {
     }
 
     public String create(String orgName, Behandling behandling) {
-        RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "behandling", orgName, createBehandlingResource(behandling));
+        RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "behandling", orgName, BehandlingMapper.createBehandlingResource(behandling));
         eventStatusService.add(requestFintEvent.getCorrId());
         return requestFintEvent.getCorrId();
     }
@@ -76,5 +53,4 @@ public class BehandlingService {
     public boolean status(String corrId) {
         return eventStatusService.get(corrId);
     }
-
 }

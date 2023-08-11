@@ -12,7 +12,7 @@ import java.util.Map;
 @Service
 public class FintUtils {
 
-    public <T extends FintLinks & Serializable> List<String> getRelationIdsFromLinks(T resource, String linkName) {
+    public static  <T extends FintLinks & Serializable> List<String> getRelationIdsFromLinks(T resource, String linkName) {
         List<String> listOfIds = new ArrayList<>();
         Map<String, List<Link>> links = resource.getLinks();
         if (!links.containsKey(linkName)) {
