@@ -25,7 +25,7 @@ public class TjenesteController {
     }
 
     @PostMapping("/{orgName}")
-    public ResponseEntity<Tjeneste> createTjeneste(ServerHttpRequest request, @PathVariable String orgName, @RequestBody Tjeneste tjeneste){
+    public ResponseEntity<Tjeneste> createTjeneste(ServerHttpRequest request, @PathVariable String orgName, @RequestBody Tjeneste tjeneste) {
         String corrId = tjenesteService.create(orgName, tjeneste);
         URI location = UriComponentsBuilder.fromUri(request.getURI())
                 .replacePath(orgName)
@@ -36,7 +36,7 @@ public class TjenesteController {
     }
 
     @GetMapping("status/{corrId}")
-    public ResponseEntity<Void> status (@PathVariable String corrId){
+    public ResponseEntity<Void> status(@PathVariable String corrId) {
         return tjenesteService.status(corrId) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.PROCESSING).build();
     }
 }
