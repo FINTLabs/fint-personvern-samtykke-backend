@@ -62,6 +62,6 @@ public class TjenesteControllerTest {
                 .bodyValue(tjeneste)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectHeader().valueEquals("Location", "testOrg/status/mockedCorrId");
+                .expectHeader().valueEquals("Location", "/tjeneste/status/mockedCorrId");
     }
 }

@@ -1,15 +1,12 @@
 package no.fintlabs.resource.behandling;
 
 import lombok.RequiredArgsConstructor;
+import no.fintlabs.utils.LocationHeader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.server.ServerRequest;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,17 +24,11 @@ public class BehandlingController {
     @PostMapping("/{orgName}")
     public ResponseEntity<Behandling> createBehandling(ServerHttpRequest request, @PathVariable String orgName, @RequestBody Behandling behandling) {
         String corrId = behandlingService.create(orgName, behandling);
-        URI location = UriComponentsBuilder.fromUri(request.getURI())
-                .replacePath(orgName)
-                .path("/status/{corrId}")
-                .buildAndExpand(corrId)
-                .toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(LocationHeader.get(corrId, request)).build();
     }
 
     @GetMapping("/status/corrId")
-    public ResponseEntity<Void> status(@PathVariable String corrId){
+    public ResponseEntity<Void> status(@PathVariable String corrId) {
         return behandlingService.status(corrId) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.PROCESSING).build();
     }
-
 }
