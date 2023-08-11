@@ -21,7 +21,7 @@ spec:
   kafka:
     enabled: true
     acls:
-      - permission: read
+      - permission: admin
         topic: '*.fint-core.*.personvern-*'
   url:
     hostname: replaceUrl
