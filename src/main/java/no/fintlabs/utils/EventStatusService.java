@@ -1,11 +1,13 @@
 package no.fintlabs.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class EventStatusService {
     private final Map<String, Boolean> status;
 
@@ -14,6 +16,7 @@ public class EventStatusService {
     }
 
     public void add(String corrId) {
+        log.info("Adding a corrId to event status map: " + corrId);
         status.put(corrId, false);
     }
 
