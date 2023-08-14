@@ -33,7 +33,7 @@ public class TjenesteController {
     }
 
     @GetMapping("/status/{corrId}")
-    public ResponseEntity<Void> status(@PathVariable String corrId) {
+    public ResponseEntity<?> status(@PathVariable String corrId) {
         log.info("Reached controller finding status for corrId: " + corrId);
 
         boolean status = tjenesteService.status(corrId);
