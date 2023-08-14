@@ -51,6 +51,7 @@ public class TjenesteService {
     }
 
     public boolean status(String corrId) {
+        log.info("Reached status in tjeneste service for corrId:" + corrId);
         return eventStatusService.get(corrId);
     }
 }

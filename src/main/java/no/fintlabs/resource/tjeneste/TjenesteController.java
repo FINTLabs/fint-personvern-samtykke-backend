@@ -28,12 +28,13 @@ public class TjenesteController {
     @PostMapping("/{orgName}")
     public ResponseEntity<Tjeneste> createTjeneste(ServerHttpRequest request, @PathVariable String orgName, @RequestBody Tjeneste tjeneste) {
         String corrId = tjenesteService.create(orgName, tjeneste);
+        log.info("Reached controller with corrId: " + corrId);
         return ResponseEntity.created(LocationHeader.get(corrId, request)).build();
     }
 
     @GetMapping("/status/{corrId}")
     public ResponseEntity<Void> status(@PathVariable String corrId) {
-        log.info("Finding status for corrId: " + corrId);
+        log.info("Reached controller finding status for corrId: " + corrId);
         return tjenesteService.status(corrId) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.PROCESSING).build();
     }
 }

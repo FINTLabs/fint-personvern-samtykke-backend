@@ -25,6 +25,7 @@ public class EventStatusService {
     }
 
     public boolean get(String corrId) {
+        log.info("Reached get in eventstatus for corrId" + corrId);
         return status.getOrDefault(corrId,false);
     }
 }
