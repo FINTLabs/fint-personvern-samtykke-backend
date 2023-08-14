@@ -40,6 +40,6 @@ public class TjenesteController {
 
         log.info("Status return from tjeneste service: " + status);
 
-        return tjenesteService.status(corrId) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.PROCESSING).build();
+        return status ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.TOO_EARLY).build();
     }
 }
