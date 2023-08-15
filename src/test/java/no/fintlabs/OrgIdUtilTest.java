@@ -15,4 +15,18 @@ public class OrgIdUtilTest {
 
         assertEquals("org123", orgId);
     }
+
+    @Test
+    public void testToKafkaEvent(){
+        assertEquals("fintlabs.no", OrgIdUtil.toKafkaEvent("fintlabs_no"));
+        assertEquals("trondelag-fylke.no", OrgIdUtil.toKafkaEvent("trondelag_fylke_no"));
+        assertEquals("fintlabs.no", OrgIdUtil.toKafkaEvent("fintlabs.no"));
+    }
+
+    @Test
+    public void testToKafkaTopic(){
+        assertEquals("fintlabs-no", OrgIdUtil.toKafkaTopic("fintlabs_no"));
+        assertEquals("trondelag-fylke-no", OrgIdUtil.toKafkaTopic("trondelag_fylke_no"));
+    }
+
 }
