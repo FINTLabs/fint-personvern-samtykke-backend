@@ -47,7 +47,7 @@ public class KafkaProducer {
 
         EventTopicNameParameters topicNameParameters = EventTopicNameParameters
                 .builder()
-                .orgId(OrgIdUtil.toKafkaEvent(orgId))
+                .orgId(OrgIdUtil.toKafkaTopic(orgId))
                 .domainContext("fint-core")
                 .eventName(eventName)
                 .build();
