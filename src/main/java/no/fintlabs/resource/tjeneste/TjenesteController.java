@@ -40,6 +40,6 @@ public class TjenesteController {
 
         log.info("Status return from tjeneste service: " + status);
 
-        return status ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.TOO_EARLY).build();
+        return status ? ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
