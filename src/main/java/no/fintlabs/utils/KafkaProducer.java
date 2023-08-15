@@ -31,7 +31,7 @@ public class KafkaProducer {
 
         RequestFintEvent requestFintEvent = new RequestFintEvent();
         requestFintEvent.setCorrId(UUID.randomUUID().toString());
-        requestFintEvent.setOrgId(OrgIdUtil.uniformForKafka(orgId));
+        requestFintEvent.setOrgId(OrgIdUtil.toKafkaEvent(orgId));
         requestFintEvent.setDomainName("personvern");
         requestFintEvent.setPackageName("samtykke");
         requestFintEvent.setResourceName(resourceName);
@@ -47,7 +47,7 @@ public class KafkaProducer {
 
         EventTopicNameParameters topicNameParameters = EventTopicNameParameters
                 .builder()
-                .orgId(OrgIdUtil.uniformForKafka(orgId))
+                .orgId(OrgIdUtil.toKafkaTopic(orgId))
                 .domainContext("fint-core")
                 .eventName(eventName)
                 .build();

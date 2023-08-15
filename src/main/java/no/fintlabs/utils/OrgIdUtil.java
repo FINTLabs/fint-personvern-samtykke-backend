@@ -10,7 +10,21 @@ public class OrgIdUtil {
         return orgId.replace("-", "_");
     }
 
-    public static String uniformForKafka(String orgId){
+    public static String toKafkaTopic(String orgId){
         return orgId.replace("_", "-");
+    }
+
+    public static String toKafkaEvent(String orgId){
+        int lastUnderscore = orgId.lastIndexOf("_");
+        if (lastUnderscore == -1) {
+            return orgId;
+        }
+
+        String beforeLastUnderscore = orgId.substring(0, lastUnderscore);
+        String afterLastUnderscore = orgId.substring(lastUnderscore + 1);
+
+        beforeLastUnderscore = beforeLastUnderscore.replace("_", "-");
+
+        return beforeLastUnderscore + "." + afterLastUnderscore;
     }
 }
