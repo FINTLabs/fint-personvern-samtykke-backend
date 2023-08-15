@@ -9,8 +9,9 @@ import java.util.UUID;
 
 public class TjenesteMapper {
 
-    public static Tjeneste createTjeneste(TjenesteResource resource) {
+    public static Tjeneste toTjeneste(TjenesteResource resource, String orgId) {
         Tjeneste tjeneste = new Tjeneste();
+        tjeneste.setOrgId(orgId);
 
         tjeneste.setId(resource.getSystemId().getIdentifikatorverdi());
         tjeneste.setNavn(resource.getNavn());
@@ -19,7 +20,7 @@ public class TjenesteMapper {
         return tjeneste;
     }
 
-    public static TjenesteResource createTjenesteResource(Tjeneste tjeneste) {
+    public static TjenesteResource toTjenesteResource(Tjeneste tjeneste) {
         TjenesteResource tjenesteResource = new TjenesteResource();
         Identifikator identifikator = new Identifikator();
         identifikator.setIdentifikatorverdi(StringUtils.hasText(tjeneste.getId()) ? tjeneste.getId() : UUID.randomUUID().toString());

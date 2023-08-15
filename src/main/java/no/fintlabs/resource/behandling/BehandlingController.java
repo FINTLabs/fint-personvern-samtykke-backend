@@ -31,4 +31,9 @@ public class BehandlingController {
     public ResponseEntity<Void> status(@PathVariable String corrId) {
         return behandlingService.status(corrId) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.PROCESSING).build();
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity handleIllegalArgumentException(Exception e){
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
 }

@@ -1,5 +1,6 @@
 package no.fintlabs.resource.tjeneste;
 
+import com.nimbusds.oauth2.sdk.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import no.fintlabs.utils.LocationHeader;
 import org.springframework.http.HttpStatus;
@@ -41,5 +42,10 @@ public class TjenesteController {
         log.info("Status return from tjeneste service: " + status);
 
         return status ? ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity handleIllegalArgumentException(Exception e){
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

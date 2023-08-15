@@ -10,6 +10,7 @@ public class Behandling {
     private String id;
     private Boolean aktiv;
     private String formal;
+    private String orgId;
     private List<String> behandlingsgrunnlagIds;
     private List<String> personopplysningIds;
     private List<String> tjenesteIds;

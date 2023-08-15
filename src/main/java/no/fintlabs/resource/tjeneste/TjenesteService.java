@@ -1,13 +1,12 @@
 package no.fintlabs.resource.tjeneste;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.personvern.samtykke.TjenesteResource;
 import no.fintlabs.adapter.models.OperationType;
 import no.fintlabs.adapter.models.RequestFintEvent;
 import no.fintlabs.utils.*;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public class TjenesteService {
         List<Tjeneste> tjenester = new ArrayList<>();
 
         tjenesteResources.getResources(OrgIdUtil.uniform(orgName)).forEach(resource -> {
-            Tjeneste tjeneste = TjenesteMapper.createTjeneste(resource);
+            Tjeneste tjeneste = TjenesteMapper.toTjeneste(resource, orgName);
             tjenester.add(tjeneste);
         });
 
@@ -44,7 +43,8 @@ public class TjenesteService {
     }
 
     public String create(String orgName, Tjeneste tjeneste) {
-        RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "tjeneste", orgName, TjenesteMapper.createTjenesteResource(tjeneste));
+        if(!StringUtils.hasText(tjeneste.getNavn())) throw new IllegalArgumentException("Name required");
+        RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "tjeneste", orgName, TjenesteMapper.toTjenesteResource(tjeneste));
         eventStatusService.add(requestFintEvent.getCorrId());
         return requestFintEvent.getCorrId();
     }

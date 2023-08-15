@@ -1,5 +1,6 @@
 package no.fintlabs.resource.behandling;
 
+import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 import no.fintlabs.adapter.models.OperationType;
@@ -9,6 +10,7 @@ import no.fintlabs.utils.KafkaProducer;
 import no.fintlabs.utils.OrgIdUtil;
 import no.fintlabs.utils.ResourceCollection;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,7 @@ public class BehandlingService {
         List<Behandling> behandlinger = new ArrayList<>();
 
         behandlingResources.getResources(OrgIdUtil.uniform(orgName)).forEach(behandlingResource -> {
-            Behandling behandling = BehandlingMapper.createBehandling(behandlingResource);
+            Behandling behandling = BehandlingMapper.toBehandling(behandlingResource, orgName);
             behandlinger.add(behandling);
         });
 
@@ -45,7 +47,8 @@ public class BehandlingService {
     }
 
     public String create(String orgName, Behandling behandling) {
-        RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "behandling", orgName, BehandlingMapper.createBehandlingResource(behandling));
+        if(!StringUtils.hasText(behandling.getFormal())) throw new IllegalArgumentException("Formal required");
+        RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "behandling", orgName, BehandlingMapper.toBehandlingResource(behandling));
         eventStatusService.add(requestFintEvent.getCorrId());
         return requestFintEvent.getCorrId();
     }
