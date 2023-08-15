@@ -1,6 +1,6 @@
 spring:
   webflux:
-    base-path: /api/samtykke
+    base-path: /consentadmin
   profiles:
     include:
       - kafka

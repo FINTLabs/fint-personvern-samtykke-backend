@@ -25,10 +25,10 @@ spec:
         topic: '*.fint-core.*.personvern-*'
   url:
     hostname: replaceUrl
-    basePath: /api/samtykke
+    basePath: /consentadmin
   ingress:
     enabled: true
-    basePath: /api/samtykke
+    basePath: /consentadmin
   resources:
     limits:
       memory: "1024Mi"
