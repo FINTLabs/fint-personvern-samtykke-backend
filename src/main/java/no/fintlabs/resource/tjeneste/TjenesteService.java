@@ -46,7 +46,6 @@ public class TjenesteService {
     public String create(String orgName, Tjeneste tjeneste) {
         RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "tjeneste", orgName, TjenesteMapper.createTjenesteResource(tjeneste));
         eventStatusService.add(requestFintEvent.getCorrId());
-        //TODO: Fulstendig location url:
         return requestFintEvent.getCorrId();
     }
 
