@@ -30,4 +30,9 @@ public class FintUtils {
         return listOfIds;
     }
 
+    public static Link createLink(String baseUrl, String endpoint, String id) {
+        Link link = new Link();
+        link.setVerdi(baseUrl + endpoint + "/systemid/" + id);
+        return link;
+    }
 }
