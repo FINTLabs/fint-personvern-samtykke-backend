@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.samtykke.TjenesteResource;
 import no.fintlabs.adapter.models.OperationType;
 import no.fintlabs.adapter.models.RequestFintEvent;
+import no.fintlabs.config.ApplicationProperties;
+import no.fintlabs.config.Endpoints;
+import no.fintlabs.resource.behandling.Behandling;
 import no.fintlabs.utils.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -19,11 +22,13 @@ public class TjenesteService {
     private final KafkaProducer kafkaProducer;
     private final ResourceCollection<TjenesteResource> tjenesteResources;
     private final TjenesteMapper tjenesteMapper;
+    private final ApplicationProperties applicationProperties;
 
-    public TjenesteService(EventStatusService eventStatusService, KafkaProducer kafkaProducer, TjenesteMapper tjenesteMapper) {
+    public TjenesteService(EventStatusService eventStatusService, KafkaProducer kafkaProducer, TjenesteMapper tjenesteMapper, ApplicationProperties applicationProperties) {
         this.eventStatusService = eventStatusService;
         this.kafkaProducer = kafkaProducer;
         this.tjenesteMapper = tjenesteMapper;
+        this.applicationProperties = applicationProperties;
         tjenesteResources = new ResourceCollection<>();
     }
 
@@ -45,7 +50,7 @@ public class TjenesteService {
     }
 
     public String create(String orgName, Tjeneste tjeneste) {
-        if(!StringUtils.hasText(tjeneste.getNavn())) throw new IllegalArgumentException("Name required");
+        if (!StringUtils.hasText(tjeneste.getNavn())) throw new IllegalArgumentException("Name required");
         RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "tjeneste", orgName, tjenesteMapper.toTjenesteResource(tjeneste));
         eventStatusService.add(requestFintEvent.getCorrId());
         return requestFintEvent.getCorrId();
@@ -54,5 +59,19 @@ public class TjenesteService {
     public boolean status(String corrId) {
         log.info("Reached status in tjeneste service for corrId:" + corrId);
         return eventStatusService.get(corrId);
+    }
+
+    public void updateTjeneste(String orgName, Behandling behandling) {
+        String tjenesteId = behandling.getTjenesteIds().get(0);
+        tjenesteResources.getResource(orgName, tjenesteId).ifPresentOrElse(
+                tjeneste -> {
+                    log.info("Update tjeneste with relation to behandling. Sending update to Kafka.");
+                    tjeneste.addBehandling(FintUtils.createLink(applicationProperties.getBaseUrl(), Endpoints.BEHANDLING, behandling.getId()));
+                    kafkaProducer.sendEvent(OperationType.UPDATE, "tjeneste", orgName, tjeneste);
+                },
+                () -> {
+                    log.warn("unexpected result. Did not find tjeneste with id: " + tjenesteId);
+                }
+        );
     }
 }
