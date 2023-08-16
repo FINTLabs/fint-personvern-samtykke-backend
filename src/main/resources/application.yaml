@@ -1,3 +1,7 @@
+fint:
+  samtykke-admin:
+    base-url: https://beta.felleskomponent.no
+
 spring:
   webflux:
     base-path: /consentadmin

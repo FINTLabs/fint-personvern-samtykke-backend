@@ -18,10 +18,12 @@ public class TjenesteService {
     private final EventStatusService eventStatusService;
     private final KafkaProducer kafkaProducer;
     private final ResourceCollection<TjenesteResource> tjenesteResources;
+    private final TjenesteMapper tjenesteMapper;
 
-    public TjenesteService(EventStatusService eventStatusService, KafkaProducer kafkaProducer) {
+    public TjenesteService(EventStatusService eventStatusService, KafkaProducer kafkaProducer, TjenesteMapper tjenesteMapper) {
         this.eventStatusService = eventStatusService;
         this.kafkaProducer = kafkaProducer;
+        this.tjenesteMapper = tjenesteMapper;
         tjenesteResources = new ResourceCollection<>();
     }
 
@@ -29,7 +31,7 @@ public class TjenesteService {
         List<Tjeneste> tjenester = new ArrayList<>();
 
         tjenesteResources.getResources(OrgIdUtil.uniform(orgName)).forEach(resource -> {
-            Tjeneste tjeneste = TjenesteMapper.toTjeneste(resource, orgName);
+            Tjeneste tjeneste = tjenesteMapper.toTjeneste(resource, orgName);
             tjenester.add(tjeneste);
         });
 
@@ -44,7 +46,7 @@ public class TjenesteService {
 
     public String create(String orgName, Tjeneste tjeneste) {
         if(!StringUtils.hasText(tjeneste.getNavn())) throw new IllegalArgumentException("Name required");
-        RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "tjeneste", orgName, TjenesteMapper.toTjenesteResource(tjeneste));
+        RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "tjeneste", orgName, tjenesteMapper.toTjenesteResource(tjeneste));
         eventStatusService.add(requestFintEvent.getCorrId());
         return requestFintEvent.getCorrId();
     }

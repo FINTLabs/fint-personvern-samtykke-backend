@@ -1,6 +1,5 @@
 package no.fintlabs.resource.behandling;
 
-import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 import no.fintlabs.adapter.models.OperationType;
@@ -22,10 +21,12 @@ public class BehandlingService {
     private final ResourceCollection<BehandlingResource> behandlingResources;
     private final KafkaProducer kafkaProducer;
     private final EventStatusService eventStatusService;
+    private final BehandlingMapper behandlingMapper;
 
-    public BehandlingService(KafkaProducer kafkaProducer, EventStatusService eventStatusService) {
+    public BehandlingService(KafkaProducer kafkaProducer, EventStatusService eventStatusService, BehandlingMapper behandlingMapper) {
         this.kafkaProducer = kafkaProducer;
         this.eventStatusService = eventStatusService;
+        this.behandlingMapper = behandlingMapper;
         behandlingResources = new ResourceCollection<>();
     }
 
@@ -33,7 +34,7 @@ public class BehandlingService {
         List<Behandling> behandlinger = new ArrayList<>();
 
         behandlingResources.getResources(OrgIdUtil.uniform(orgName)).forEach(behandlingResource -> {
-            Behandling behandling = BehandlingMapper.toBehandling(behandlingResource, orgName);
+            Behandling behandling = behandlingMapper.toBehandling(behandlingResource, orgName);
             behandlinger.add(behandling);
         });
 
@@ -48,7 +49,7 @@ public class BehandlingService {
 
     public String create(String orgName, Behandling behandling) {
         if(!StringUtils.hasText(behandling.getFormal())) throw new IllegalArgumentException("Formal required");
-        RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "behandling", orgName, BehandlingMapper.toBehandlingResource(behandling));
+        RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "behandling", orgName, behandlingMapper.toBehandlingResource(behandling));
         eventStatusService.add(requestFintEvent.getCorrId());
         return requestFintEvent.getCorrId();
     }

@@ -1,7 +1,10 @@
 package no.fintlabs.resource.behandling;
 
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
+import no.fint.model.resource.Link;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
+import no.fintlabs.config.ApplicationProperties;
+import no.fintlabs.config.Endpoints;
 import no.fintlabs.utils.FintUtils;
 import org.springframework.util.StringUtils;
 
@@ -9,7 +12,13 @@ import java.util.UUID;
 
 public class BehandlingMapper {
 
-    public static Behandling toBehandling(BehandlingResource behandlingResource, String orgId) {
+    private final ApplicationProperties applicationProperties;
+
+    public BehandlingMapper(ApplicationProperties applicationProperties) {
+        this.applicationProperties = applicationProperties;
+    }
+
+    public Behandling toBehandling(BehandlingResource behandlingResource, String orgId) {
         Behandling behandling = new Behandling();
 
         behandling.setId(behandlingResource.getSystemId().getIdentifikatorverdi());
@@ -24,13 +33,21 @@ public class BehandlingMapper {
         return behandling;
     }
 
-    public static BehandlingResource toBehandlingResource(Behandling behandling) {
+    public BehandlingResource toBehandlingResource(Behandling behandling) {
         BehandlingResource behandlingResource = new BehandlingResource();
         Identifikator identifikator = new Identifikator();
         identifikator.setIdentifikatorverdi(StringUtils.hasText(behandling.getId()) ? behandling.getId() : UUID.randomUUID().toString());
         identifikator.setIdentifikatorverdi(behandling.getId());
         behandlingResource.setFormal(behandling.getFormal());
 
+        behandling.getTjenesteIds().forEach(id -> behandlingResource.addTjeneste(createLink(Endpoints.TJENESTE, id)));
+        behandling.getBehandlingsgrunnlagIds().forEach(id -> behandlingResource.addBehandlingsgrunnlag(createLink(Endpoints.BEHNADLINGSGRUNNLAG, id)));
+        behandling.getPersonopplysningIds().forEach(id -> behandlingResource.addPersonopplysning(createLink(Endpoints.PERSONOPPLYSNING, id)));
+
         return behandlingResource;
+    }
+
+    private Link createLink(String endpoints, String id) {
+        return FintUtils.createLink(applicationProperties.getBaseUrl(), endpoints, id);
     }
 }
