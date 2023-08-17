@@ -11,7 +11,6 @@ import no.fintlabs.utils.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -33,14 +32,11 @@ public class TjenesteService {
     }
 
     public List<Tjeneste> getTjenester(String orgName) {
-        List<Tjeneste> tjenester = new ArrayList<>();
-
-        tjenesteResources.getResources(OrgIdUtil.uniform(orgName)).forEach(resource -> {
-            Tjeneste tjeneste = tjenesteMapper.toTjeneste(resource, orgName);
-            tjenester.add(tjeneste);
-        });
-
-        return tjenester;
+        return tjenesteResources
+                .getResources(OrgIdUtil.uniform(orgName))
+                .stream()
+                .map(resource -> tjenesteMapper.toTjeneste(resource, orgName))
+                .toList();
     }
 
     public void addResource(String orgId, TjenesteResource resource, String corrId) {
@@ -69,9 +65,7 @@ public class TjenesteService {
                     tjeneste.addBehandling(FintUtils.createLink(applicationProperties.getBaseUrl(), Endpoints.BEHANDLING, behandling.getId()));
                     kafkaProducer.sendEvent(OperationType.UPDATE, "tjeneste", orgName, tjeneste);
                 },
-                () -> {
-                    log.warn("unexpected result. Did not find tjeneste with id: " + tjenesteId);
-                }
+                () -> log.warn("unexpected result. Did not find tjeneste with id: " + tjenesteId)
         );
     }
 }

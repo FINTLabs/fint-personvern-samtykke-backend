@@ -12,7 +12,6 @@ import no.fintlabs.utils.ResourceCollection;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -36,14 +35,12 @@ public class BehandlingService {
     }
 
     public List<Behandling> getBehandlinger(String orgName) {
-        List<Behandling> behandlinger = new ArrayList<>();
 
-        behandlingResources.getResources(OrgIdUtil.uniform(orgName)).forEach(behandlingResource -> {
-            Behandling behandling = behandlingMapper.toBehandling(behandlingResource, orgName);
-            behandlinger.add(behandling);
-        });
-
-        return behandlinger;
+        return behandlingResources
+                .getResources(OrgIdUtil.uniform(orgName))
+                .stream()
+                .map(behandlingResource -> behandlingMapper.toBehandling(behandlingResource, orgName))
+                .toList();
     }
 
     public void addResource(String orgId, BehandlingResource resource) {

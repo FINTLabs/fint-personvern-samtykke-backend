@@ -10,27 +10,18 @@ import java.util.*;
 @Service
 public class PersonopplysningService {
 
-    private final List<Personopplysning> personopplysnings;
     private final Map<String, PersonopplysningResource> personopplysningResources;
 
     public PersonopplysningService() {
         personopplysningResources = new HashMap<>();
-        personopplysnings = new ArrayList<>();
     }
 
 
     public List<Personopplysning> getPersonopplysning() {
-        //TODO: Remove filter (CT-386)
-        personopplysningResources.values()
+       return personopplysningResources.values()
                 .stream()
-                .filter(p -> p.getSystemId().getIdentifikatorverdi().contains("utdanning/elev/elev"))
-                .distinct()
-                .forEach(resource -> {
-            Personopplysning personopplysning = createPersonopplysning(resource);
-            personopplysnings.add(personopplysning);
-        });
-
-        return personopplysnings;
+                .map(this::createPersonopplysning)
+                .toList();
     }
 
     private Personopplysning createPersonopplysning(PersonopplysningResource personopplysningResource) {
