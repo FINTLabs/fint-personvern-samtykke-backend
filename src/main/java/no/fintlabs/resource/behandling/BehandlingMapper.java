@@ -37,10 +37,12 @@ public class BehandlingMapper {
 
     public BehandlingResource toBehandlingResource(Behandling behandling) {
         BehandlingResource behandlingResource = new BehandlingResource();
+
         Identifikator identifikator = new Identifikator();
         identifikator.setIdentifikatorverdi(StringUtils.hasText(behandling.getId()) ? behandling.getId() : UUID.randomUUID().toString());
-        identifikator.setIdentifikatorverdi(behandling.getId());
+
         behandlingResource.setFormal(behandling.getFormal());
+        behandlingResource.setAktiv(behandling.getAktiv());
 
         behandling.getTjenesteIds().forEach(id -> behandlingResource.addTjeneste(createLink(Endpoints.TJENESTE, id)));
         behandling.getBehandlingsgrunnlagIds().forEach(id -> behandlingResource.addBehandlingsgrunnlag(createLink(Endpoints.BEHNADLINGSGRUNNLAG, id)));

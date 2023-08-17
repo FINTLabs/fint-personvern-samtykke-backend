@@ -35,7 +35,7 @@ public class TjenesteMapper {
         Identifikator identifikator = new Identifikator();
         identifikator.setIdentifikatorverdi(StringUtils.hasText(tjeneste.getId()) ? tjeneste.getId() : UUID.randomUUID().toString());
         tjenesteResource.setSystemId(identifikator);
-        tjeneste.setNavn(tjenesteResource.getNavn());
+        tjenesteResource.setNavn(tjeneste.getNavn());
         tjeneste.getBehandlingIds().forEach(id -> tjenesteResource.addBehandling(FintUtils.createLink(applicationProperties.getBaseUrl(), Endpoints.BEHANDLING, id)));
 
         return tjenesteResource;
