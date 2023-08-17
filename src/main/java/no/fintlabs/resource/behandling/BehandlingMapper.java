@@ -6,10 +6,12 @@ import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 import no.fintlabs.config.ApplicationProperties;
 import no.fintlabs.config.Endpoints;
 import no.fintlabs.utils.FintUtils;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
+@Service
 public class BehandlingMapper {
 
     private final ApplicationProperties applicationProperties;
