@@ -2,18 +2,19 @@ package no.fintlabs.resource.behandling;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
-import no.fint.model.resource.personvern.samtykke.TjenesteResource;
 import no.fintlabs.adapter.models.OperationType;
 import no.fintlabs.adapter.models.RequestFintEvent;
-import no.fintlabs.config.ApplicationProperties;
-import no.fintlabs.config.Endpoints;
 import no.fintlabs.resource.tjeneste.TjenesteService;
-import no.fintlabs.utils.*;
+import no.fintlabs.utils.EventStatusService;
+import no.fintlabs.utils.KafkaProducer;
+import no.fintlabs.utils.OrgIdUtil;
+import no.fintlabs.utils.ResourceCollection;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -53,13 +54,31 @@ public class BehandlingService {
 
     public String create(String orgName, Behandling behandling) {
         if (!StringUtils.hasText(behandling.getFormal())) throw new IllegalArgumentException("Formal required");
+        validate(behandling.getTjenesteIds(), "TjenesteIds");
+        validate(behandling.getBehandlingsgrunnlagIds(), "BehandlingsgrunnlagIds");
+        validate(behandling.getPersonopplysningIds(), "PersonopplysningIds");
         RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "behandling", orgName, behandlingMapper.toBehandlingResource(behandling));
         eventStatusService.add(requestFintEvent.getCorrId());
         tjenesteService.updateTjeneste(orgName, behandling);
         return requestFintEvent.getCorrId();
     }
 
+    public void validate(List<String> list, String fieldName) {
+        if (list == null || list.isEmpty()) throw new IllegalArgumentException(fieldName + " required");
+    }
+
     public boolean status(String corrId) {
         return eventStatusService.get(corrId);
+    }
+
+    public String updateState(String orgName, String id, boolean aktiv) {
+        Optional<BehandlingResource> result = behandlingResources.getResource(orgName, id);
+        if (result.isEmpty()) throw new NoSuchElementException("Element not found: " + id);
+
+        BehandlingResource behandlingResource = result.get();
+        behandlingResource.setAktiv(aktiv);
+        RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "behandling", orgName, behandlingResource);
+        eventStatusService.add(requestFintEvent.getCorrId());
+        return requestFintEvent.getCorrId();
     }
 }

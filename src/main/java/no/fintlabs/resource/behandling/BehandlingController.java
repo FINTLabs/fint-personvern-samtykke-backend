@@ -22,8 +22,14 @@ public class BehandlingController {
     }
 
     @PostMapping("/{orgName}")
-    public ResponseEntity<Behandling> createBehandling(ServerHttpRequest request, @PathVariable String orgName, @RequestBody Behandling behandling) {
+    public ResponseEntity<Void> createBehandling(ServerHttpRequest request, @PathVariable String orgName, @RequestBody Behandling behandling) {
         String corrId = behandlingService.create(orgName, behandling);
+        return ResponseEntity.created(LocationHeader.get(corrId, request)).build();
+    }
+
+    @PutMapping("/{orgName}/{id}/{aktiv}")
+    public ResponseEntity<Void> updateState(ServerHttpRequest request, @PathVariable String orgName, @PathVariable String id, @PathVariable boolean aktiv){
+        String corrId = behandlingService.updateState(orgName, id, aktiv);
         return ResponseEntity.created(LocationHeader.get(corrId, request)).build();
     }
 

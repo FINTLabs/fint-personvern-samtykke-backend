@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.kodeverk.PersonopplysningResource;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -23,7 +20,12 @@ public class PersonopplysningService {
 
 
     public List<Personopplysning> getPersonopplysning() {
-        personopplysningResources.values().forEach(resource -> {
+        //TODO: Remove filter (CT-386)
+        personopplysningResources.values()
+                .stream()
+                .filter(p -> p.getSystemId().getIdentifikatorverdi().contains("utdanning/elev/elev"))
+                .distinct()
+                .forEach(resource -> {
             Personopplysning personopplysning = createPersonopplysning(resource);
             personopplysnings.add(personopplysning);
         });
