@@ -2,6 +2,7 @@ package no.fintlabs.resource.behandling;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -11,8 +12,8 @@ public class Behandling {
     private Boolean aktiv;
     private String formal;
     private String orgId;
-    private List<String> behandlingsgrunnlagIds;
-    private List<String> personopplysningIds;
-    private List<String> tjenesteIds;
+    private List<String> behandlingsgrunnlagIds = new ArrayList<>();
+    private List<String> personopplysningIds = new ArrayList<>();
+    private List<String> tjenesteIds = new ArrayList<>();
 
 }
