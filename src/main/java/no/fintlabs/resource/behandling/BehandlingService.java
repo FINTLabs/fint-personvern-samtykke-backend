@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -51,13 +52,24 @@ public class BehandlingService {
 
     public String create(String orgName, Behandling behandling) {
         if (!StringUtils.hasText(behandling.getFormal())) throw new IllegalArgumentException("Formal required");
+
         validate(behandling.getTjenesteIds(), "TjenesteIds");
         validate(behandling.getBehandlingsgrunnlagIds(), "BehandlingsgrunnlagIds");
         validate(behandling.getPersonopplysningIds(), "PersonopplysningIds");
+        createIdIfNotPresent(behandling);
+
         RequestFintEvent requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "behandling", orgName, behandlingMapper.toBehandlingResource(behandling));
+
         eventStatusService.add(requestFintEvent.getCorrId());
         tjenesteService.updateTjeneste(orgName, behandling);
+
         return requestFintEvent.getCorrId();
+    }
+
+    private void createIdIfNotPresent(Behandling behandling) {
+        if (!StringUtils.hasText(behandling.getId())) {
+            behandling.setId(UUID.randomUUID().toString());
+        }
     }
 
     public void validate(List<String> list, String fieldName) {

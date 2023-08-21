@@ -40,6 +40,7 @@ public class BehandlingMapper {
 
         Identifikator identifikator = new Identifikator();
         identifikator.setIdentifikatorverdi(StringUtils.hasText(behandling.getId()) ? behandling.getId() : UUID.randomUUID().toString());
+        behandlingResource.setSystemId(identifikator);
 
         behandlingResource.setFormal(behandling.getFormal());
         behandlingResource.setAktiv(behandling.getAktiv());
