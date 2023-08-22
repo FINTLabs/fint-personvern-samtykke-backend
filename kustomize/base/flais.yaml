@@ -25,10 +25,10 @@ spec:
         topic: '*.fint-core.*.personvern-*'
   url:
     hostname: replaceUrl
-    basePath: /consentadmin
+    basePath: /kunde-portal/consent-admin
   ingress:
     enabled: true
-    basePath: /consentadmin
+    basePath: /kunde-portal/consent-admin
   resources:
     limits:
       memory: "1024Mi"

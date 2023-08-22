@@ -4,7 +4,7 @@ fint:
 
 spring:
   webflux:
-    base-path: /consentadmin
+    base-path: /kunde-portal/consent-admin
   profiles:
     include:
       - kafka
