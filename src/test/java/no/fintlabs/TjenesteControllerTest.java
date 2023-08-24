@@ -1,5 +1,6 @@
 package no.fintlabs;
 
+import no.fintlabs.resource.behandling.BehandlingService;
 import no.fintlabs.resource.tjeneste.Tjeneste;
 import no.fintlabs.resource.tjeneste.TjenesteController;
 import no.fintlabs.resource.tjeneste.TjenesteService;
@@ -14,6 +15,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.server.adapter.DefaultServerWebExchange;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class TjenesteControllerTest {
@@ -64,4 +66,5 @@ public class TjenesteControllerTest {
                 .expectStatus().isCreated()
                 .expectHeader().valueEquals("Location", "/tjeneste/status/mockedCorrId");
     }
+
 }
