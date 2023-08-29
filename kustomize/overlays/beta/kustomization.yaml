@@ -15,7 +15,7 @@ patches:
   - patch: |-
       - op: replace
         path: "/spec/url/hostname"
-        value: "beta.felleskomponent.no"
+        value: "kunde-beta.felleskomponent.no"
     target:
       kind: Application
       name: fint-samtykke-admin-backend

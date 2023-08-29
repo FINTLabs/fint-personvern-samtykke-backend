@@ -24,11 +24,11 @@ spec:
       - permission: admin
         topic: '*.fint-core.*.personvern-*'
   url:
-    hostname: replaceUrl
-    basePath: /kunde-portal/consent-admin
+    hostname: kunde-beta.felleskomponent.no
+    basePath: /consent-admin
   ingress:
     enabled: true
-    basePath: /kunde-portal/consent-admin
+    basePath: /consent-admin
   resources:
     limits:
       memory: "1024Mi"
