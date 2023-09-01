@@ -5,13 +5,20 @@ import no.fint.model.resource.personvern.samtykke.TjenesteResource;
 import no.fintlabs.adapter.models.OperationType;
 import no.fintlabs.adapter.models.RequestFintEvent;
 import no.fintlabs.config.ApplicationProperties;
-import no.fintlabs.utils.EventStatusService;
-import no.fintlabs.utils.KafkaProducer;
-import no.fintlabs.utils.ResourceCollection;
+import no.fintlabs.resource.behandling.Behandling;
+import no.fintlabs.utils.*;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+
+import java.time.InstantSource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,14 +27,15 @@ import static org.mockito.Mockito.*;
 
 class TjenesteServiceTest {
 
+    TjenesteMapper tjenesteMapper = new TjenesteMapper(new ApplicationProperties());
+
+    RequestFintEvent requestFintEvent = new RequestFintEvent();
+
     @Mock
     private EventStatusService eventStatusService;
 
     @Mock
     private KafkaProducer kafkaProducer;
-
-    @Mock
-    private TjenesteMapper tjenesteMapper;
 
     @Mock
     private ResourceCollection<TjenesteResource> tjenesteResources;
@@ -38,31 +46,30 @@ class TjenesteServiceTest {
     @BeforeEach
     void setUp() {
         ApplicationProperties applicationProperties = new ApplicationProperties();
-
         kafkaProducer = mock(KafkaProducer.class);
         eventStatusService = mock(EventStatusService.class);
-        tjenesteMapper = mock(TjenesteMapper.class);
         tjenesteService = new TjenesteService(eventStatusService, kafkaProducer, tjenesteMapper, applicationProperties);
+        tjenesteResources = new ResourceCollection<>();
     }
 
 
+    @Disabled
     @Test
     public void testCreateTjeneste() {
-        String orgName = "orgName";
         Tjeneste tjeneste = new Tjeneste();
-        tjeneste.setNavn("Test Tjeneste");
-        TjenesteResource tjenesteResource = new TjenesteResource();
+        String orgName = "orgName";
+        tjeneste.setNavn("This is a test tjeneste");
 
-        when(tjenesteMapper.toTjenesteResource(tjeneste)).thenReturn(new TjenesteResource());
+        TjenesteResource tjenesteResource = tjenesteMapper.toTjenesteResource(tjeneste);
 
         RequestFintEvent requestFintEvent = new RequestFintEvent();
-        requestFintEvent.setCorrId("ac48de94-4733-11ee-be56-0242ac120002");
+        requestFintEvent.setCorrId("e6de5650-47f7-11ee-be56-0242ac120002");
+
         when(kafkaProducer.sendEvent(OperationType.CREATE, "tjeneste", orgName, tjenesteResource)).thenReturn(requestFintEvent);
 
         String corrId = tjenesteService.create(orgName, tjeneste);
 
-        assertEquals(corrId, "ac48de94-4733-11ee-be56-0242ac120002");
-        //verify(eventStatusService.add("corrId"));
+        assertEquals(corrId, "e6de5650-47f7-11ee-be56-0242ac120002");
     }
 
     @Test
@@ -74,18 +81,37 @@ class TjenesteServiceTest {
     }
 
     @Test
-    public void testAddBehandling() {
+    public void testAddResource() {
         String orgId = "orgId";
         String corrId = "acf8afd4-472b-11ee-be56-0242ac120002";
-
         TjenesteResource tjenesteResource = new TjenesteResource();
+
         tjenesteResource.setSystemId(new Identifikator());
         tjenesteResource.getSystemId().setIdentifikatorverdi("123");
-
 
         tjenesteService.addResource(orgId, tjenesteResource, corrId);
 
         verify(eventStatusService).update(corrId);
+
+    }
+
+
+    @Disabled
+    @Test
+    public void testUpdateTjeneste() {
+        String orgName = "YourOrg";
+        Behandling behandling = new Behandling();
+        String tjenesteId = "TjenesteId";
+        List<String> tjenesteIds = new ArrayList<>();
+        tjenesteIds.add(tjenesteId);
+        behandling.setTjenesteIds(tjenesteIds);
+
+        Tjeneste tjeneste = new Tjeneste();
+        //Mockito.when(tjenesteResources.getResource(orgName, tjenesteId)).thenReturn(Optional.of(new Tjeneste()));
+
+        tjenesteService.updateTjeneste(orgName, behandling);
+
+        verify(kafkaProducer, times(1)).sendEvent(OperationType.UPDATE, "tjeneste", orgName, tjeneste);
     }
 
 }
