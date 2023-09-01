@@ -28,20 +28,16 @@ import static org.mockito.Mockito.*;
 class TjenesteServiceTest {
 
     TjenesteMapper tjenesteMapper = new TjenesteMapper(new ApplicationProperties());
-
-    RequestFintEvent requestFintEvent = new RequestFintEvent();
+    private TjenesteService tjenesteService;
+    private KafkaProducer kafkaProducer;
 
     @Mock
     private EventStatusService eventStatusService;
 
-    @Mock
-    private KafkaProducer kafkaProducer;
 
     @Mock
     private ResourceCollection<TjenesteResource> tjenesteResources;
 
-    @InjectMocks
-    private TjenesteService tjenesteService;
 
     @BeforeEach
     void setUp() {
@@ -53,7 +49,7 @@ class TjenesteServiceTest {
     }
 
 
-    @Disabled
+
     @Test
     public void testCreateTjeneste() {
         Tjeneste tjeneste = new Tjeneste();
@@ -63,9 +59,9 @@ class TjenesteServiceTest {
         TjenesteResource tjenesteResource = tjenesteMapper.toTjenesteResource(tjeneste);
 
         RequestFintEvent requestFintEvent = new RequestFintEvent();
+        when(kafkaProducer.sendEvent(Mockito.eq(OperationType.CREATE), Mockito.eq("tjeneste"), Mockito.eq(orgName), Mockito.any(TjenesteResource.class))).thenReturn(requestFintEvent);
         requestFintEvent.setCorrId("e6de5650-47f7-11ee-be56-0242ac120002");
 
-        when(kafkaProducer.sendEvent(OperationType.CREATE, "tjeneste", orgName, tjenesteResource)).thenReturn(requestFintEvent);
 
         String corrId = tjenesteService.create(orgName, tjeneste);
 
@@ -95,7 +91,6 @@ class TjenesteServiceTest {
 
     }
 
-
     @Disabled
     @Test
     public void testUpdateTjeneste() {
@@ -107,7 +102,7 @@ class TjenesteServiceTest {
         behandling.setTjenesteIds(tjenesteIds);
 
         Tjeneste tjeneste = new Tjeneste();
-        //Mockito.when(tjenesteResources.getResource(orgName, tjenesteId)).thenReturn(Optional.of(new Tjeneste()));
+        Mockito.when(tjenesteResources.getResource(orgName, tjenesteId)).thenReturn(Optional.of(new TjenesteResource()));
 
         tjenesteService.updateTjeneste(orgName, behandling);
 
