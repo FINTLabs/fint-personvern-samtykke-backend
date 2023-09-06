@@ -2,6 +2,7 @@ package no.fintlabs.resource.behandling;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
+import no.fint.model.resource.personvern.samtykke.BehandlingResources;
 import no.fintlabs.adapter.models.OperationType;
 import no.fintlabs.adapter.models.RequestFintEvent;
 import no.fintlabs.resource.tjeneste.TjenesteService;
@@ -9,6 +10,7 @@ import no.fintlabs.utils.EventStatusService;
 import no.fintlabs.utils.KafkaProducer;
 import no.fintlabs.utils.OrgIdUtil;
 import no.fintlabs.utils.ResourceCollection;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -27,16 +29,20 @@ public class BehandlingService {
     private final BehandlingMapper behandlingMapper;
     private final TjenesteService tjenesteService;
 
-    public BehandlingService(KafkaProducer kafkaProducer, EventStatusService eventStatusService, BehandlingMapper behandlingMapper, TjenesteService tjenesteService) {
+    public BehandlingService(KafkaProducer kafkaProducer, EventStatusService eventStatusService, BehandlingMapper behandlingMapper, TjenesteService tjenesteService, ResourceCollection<BehandlingResource> behandlingResources){
         this.kafkaProducer = kafkaProducer;
         this.eventStatusService = eventStatusService;
         this.behandlingMapper = behandlingMapper;
         this.tjenesteService = tjenesteService;
-        behandlingResources = new ResourceCollection<>();
+        this.behandlingResources = behandlingResources;
+    }
+
+    @Autowired
+    public BehandlingService(KafkaProducer kafkaProducer, EventStatusService eventStatusService, BehandlingMapper behandlingMapper, TjenesteService tjenesteService) {
+        this(kafkaProducer, eventStatusService, behandlingMapper, tjenesteService, new ResourceCollection<>());
     }
 
     public List<Behandling> getBehandlinger(String orgName) {
-
         return behandlingResources
                 .getResources(OrgIdUtil.uniform(orgName))
                 .stream()

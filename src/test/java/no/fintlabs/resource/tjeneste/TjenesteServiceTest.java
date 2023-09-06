@@ -6,16 +6,15 @@ import no.fintlabs.adapter.models.OperationType;
 import no.fintlabs.adapter.models.RequestFintEvent;
 import no.fintlabs.config.ApplicationProperties;
 import no.fintlabs.resource.behandling.Behandling;
-import no.fintlabs.utils.*;
-import org.junit.Ignore;
+import no.fintlabs.utils.EventStatusService;
+import no.fintlabs.utils.KafkaProducer;
+import no.fintlabs.utils.ResourceCollection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.time.InstantSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +33,6 @@ class TjenesteServiceTest {
     @Mock
     private EventStatusService eventStatusService;
 
-
     @Mock
     private ResourceCollection<TjenesteResource> tjenesteResources;
 
@@ -49,7 +47,6 @@ class TjenesteServiceTest {
     }
 
 
-
     @Test
     public void testCreateTjeneste() {
         Tjeneste tjeneste = new Tjeneste();
@@ -61,7 +58,6 @@ class TjenesteServiceTest {
         RequestFintEvent requestFintEvent = new RequestFintEvent();
         when(kafkaProducer.sendEvent(Mockito.eq(OperationType.CREATE), Mockito.eq("tjeneste"), Mockito.eq(orgName), Mockito.any(TjenesteResource.class))).thenReturn(requestFintEvent);
         requestFintEvent.setCorrId("e6de5650-47f7-11ee-be56-0242ac120002");
-
 
         String corrId = tjenesteService.create(orgName, tjeneste);
 
@@ -91,22 +87,23 @@ class TjenesteServiceTest {
 
     }
 
+
     @Disabled
     @Test
     public void testUpdateTjeneste() {
-        String orgName = "YourOrg";
+        String orgName = "TestOrg";
         Behandling behandling = new Behandling();
         String tjenesteId = "TjenesteId";
         List<String> tjenesteIds = new ArrayList<>();
         tjenesteIds.add(tjenesteId);
         behandling.setTjenesteIds(tjenesteIds);
 
-        Tjeneste tjeneste = new Tjeneste();
-        Mockito.when(tjenesteResources.getResource(orgName, tjenesteId)).thenReturn(Optional.of(new TjenesteResource()));
+        TjenesteResource tjenesteResource = new TjenesteResource();
+        Mockito.when(tjenesteResources.getResource(orgName, tjenesteId)).thenReturn(Optional.of(tjenesteResource));
 
         tjenesteService.updateTjeneste(orgName, behandling);
 
-        verify(kafkaProducer, times(1)).sendEvent(OperationType.UPDATE, "tjeneste", orgName, tjeneste);
+        verify(kafkaProducer, times(1)).sendEvent(eq(OperationType.UPDATE), eq("tjeneste"), eq(orgName), any(Tjeneste.class));
     }
 
 }
