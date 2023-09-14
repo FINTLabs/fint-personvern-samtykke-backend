@@ -1,8 +1,6 @@
 package no.fintlabs.resource.behandling;
 
-import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
-import no.fint.model.resource.personvern.samtykke.BehandlingResources;
 import no.fintlabs.adapter.models.OperationType;
 import no.fintlabs.adapter.models.RequestFintEvent;
 import no.fintlabs.config.ApplicationProperties;
@@ -11,25 +9,23 @@ import no.fintlabs.utils.EventStatusService;
 import no.fintlabs.utils.KafkaProducer;
 import no.fintlabs.utils.OrgIdUtil;
 import no.fintlabs.utils.ResourceCollection;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
-import javax.annotation.Resource;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-@Disabled
 class BehandlingServiceTest {
 
     @Mock
@@ -52,14 +48,18 @@ class BehandlingServiceTest {
 
     @BeforeEach
     void setUp() {
-        kafkaProducer = Mockito.mock(KafkaProducer.class);
-        eventStatusService = Mockito.mock(EventStatusService.class);
-        tjenesteService = Mockito.mock(TjenesteService.class);
+        MockitoAnnotations.openMocks(this);
+//        kafkaProducer = Mockito.mock(KafkaProducer.class);
+//        eventStatusService = Mockito.mock(EventStatusService.class);
+//        tjenesteService = Mockito.mock(TjenesteService.class);
 
-        behandlingResources = mock(ResourceCollection.class);
+//        behandlingResources = mock(ResourceCollection.class);
+
+
         ApplicationProperties applicationProperties = new ApplicationProperties();
         BehandlingMapper behandlingMapper = new BehandlingMapper(applicationProperties);
-        behandlingService = new BehandlingService(kafkaProducer, eventStatusService, behandlingMapper, tjenesteService, behandlingResources);
+//        behandlingService = new BehandlingService(kafkaProducer, eventStatusService, behandlingMapper, tjenesteService, behandlingResources);
+//        behandlingService = new BehandlingService(kafkaProducer, eventStatusService, behandlingMapper, tjenesteService);
 
 
         Behandling behandling = new Behandling();
@@ -110,18 +110,68 @@ class BehandlingServiceTest {
         verify(eventStatusService).add(requestFintEvent.getCorrId());
     }
 
-    @Disabled
+//    @Test
+//    public void testAddResource(){
+//        String orgId = "orgId";
+//        String orgName = "orgName";
+//        behandlingService.addResource(orgId, behandlingResource);
+////
+//        String identifikatorverdi = behandlingResource.getSystemId().getIdentifikatorverdi();
+//
+//        behandlingResources.put(OrgIdUtil.uniform(orgId), identifikatorverdi, behandlingResource);
+//
+//
+//        System.out.println(behandlingResources.getResources(orgId));
+//
+//
+//        verify(behandlingResources).put(eq(OrgIdUtil.uniform(orgId)), eq(behandlingResource.getSystemId().getIdentifikatorverdi()), eq(behandlingResource));
+//
+//
+//
+//        Optional<BehandlingResource> optionalSavedBehandlingResource = behandlingResources.getResource(orgName,identifikatorverdi);
+//
+//        Assertions.assertTrue(optionalSavedBehandlingResource.isPresent());
+//
+//    }
+
     @Test
-    public void testAddResource(){
-        String orgId = "orgId";
-        String orgName = "orgName";
-        behandlingService.addResource(orgId, behandlingResource);
+    public void testAddResource() {
+        // Given
+        String orgId = "someOrgId";
         String identifikatorverdi = behandlingResource.getSystemId().getIdentifikatorverdi();
-        verify(behandlingResources).put(eq(OrgIdUtil.uniform(orgId)), eq(behandlingResource.getSystemId().getIdentifikatorverdi()), eq(behandlingResource));
 
-        Optional<BehandlingResource> savedBehandlingResource = behandlingResources.getResource(orgName,identifikatorverdi);
 
-        Assertions.assertSame(behandlingResource, savedBehandlingResource);
+        // Stubbing the call to behandlingResources.put()
+        doAnswer(invocation -> {
+            String key = invocation.getArgument(1);
+            BehandlingResource value = invocation.getArgument(2);
+
+            // Assertions to check if the content is correct
+            assertEquals("id", key);
+            assertEquals(true, value.getAktiv());
+            assertEquals("Test formal", value.getFormal());
+
+            return null;
+        }).when(behandlingResources).put(orgId, identifikatorverdi, behandlingResource);
+
+
+        // When
+        behandlingService.addResource(orgId, behandlingResource);
+
+
+        // Then
+        verify(behandlingResources, times(1)).put(eq(orgId), eq(identifikatorverdi), eq(behandlingResource));
+
+
+        // Validate `getBehandlinger`
+//        List<Behandling> result = behandlingService.getBehandlinger(orgId);
+//
+//        assertEquals(1, result.size()); // Ensure only one element is returned
+//        Behandling retrievedBehandling = result.get(0);
+//
+//        assertEquals(identifikatorverdi, retrievedBehandling.getId());
+//        assertEquals(true, retrievedBehandling.getAktiv());
+//        assertEquals("Test formal", retrievedBehandling.getFormal());
     }
 
     @Disabled
