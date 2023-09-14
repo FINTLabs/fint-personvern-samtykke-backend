@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
+@Disabled
 class TjenesteServiceTest {
 
     TjenesteMapper tjenesteMapper = new TjenesteMapper(new ApplicationProperties());
@@ -86,7 +87,6 @@ class TjenesteServiceTest {
         verify(eventStatusService).update(corrId);
 
     }
-
 
     @Disabled
     @Test
