@@ -3,14 +3,11 @@ package no.fintlabs.resource.behandling;
 import no.fint.model.resource.personvern.samtykke.BehandlingResource;
 import no.fintlabs.adapter.models.OperationType;
 import no.fintlabs.adapter.models.RequestFintEvent;
-import no.fintlabs.config.ApplicationProperties;
 import no.fintlabs.resource.tjeneste.TjenesteService;
 import no.fintlabs.utils.EventStatusService;
 import no.fintlabs.utils.KafkaProducer;
-import no.fintlabs.utils.OrgIdUtil;
 import no.fintlabs.utils.ResourceCollection;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -22,24 +19,21 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-@Disabled
 class BehandlingServiceTest {
 
-    private BehandlingMapper behandlingMapper;
-
+    @Mock
     private ResourceCollection<BehandlingResource> behandlingResources;
 
-    private RequestFintEvent requestFintEvent;
+    @Mock
+    private KafkaProducer kafkaProducer;
 
     @Mock
     private EventStatusService eventStatusService;
 
     @Mock
-    private KafkaProducer kafkaProducer;
+    private BehandlingMapper behandlingMapper;
 
     @Mock
     private TjenesteService tjenesteService;
@@ -47,105 +41,65 @@ class BehandlingServiceTest {
     @InjectMocks
     private BehandlingService behandlingService;
 
-    private BehandlingResource behandlingResource;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-//        kafkaProducer = Mockito.mock(KafkaProducer.class);
-//        eventStatusService = Mockito.mock(EventStatusService.class);
-//        tjenesteService = Mockito.mock(TjenesteService.class);
-
-//        behandlingResources = mock(ResourceCollection.class);
-
-        requestFintEvent = new RequestFintEvent();
-        behandlingResources = new ResourceCollection<>();
-        ApplicationProperties applicationProperties = new ApplicationProperties();
-        BehandlingMapper behandlingMapper = new BehandlingMapper(applicationProperties);
-        behandlingService = new BehandlingService(kafkaProducer, eventStatusService, behandlingMapper, tjenesteService, behandlingResources);
-        behandlingService = new BehandlingService(kafkaProducer, eventStatusService, behandlingMapper, tjenesteService);
-
-        Behandling behandling = new Behandling();
-        behandling.setId("id");
-        behandling.setAktiv(true);
-        behandling.setFormal("Test formal");
-        behandling.setTjenesteIds(Collections.singletonList("tjenesteId"));
-
-        behandlingResource = behandlingMapper.toBehandlingResource(behandling);
-    }
-
-    @Test
-    public void testCreateBehandling() {
-        String orgName = "TestName";
-        Behandling behandling = new Behandling();
-        behandling.setFormal("testFormal");
-        behandling.setTjenesteIds(Arrays.asList("tjeneste1", "tjeneste2"));
-        behandling.setBehandlingsgrunnlagIds(Arrays.asList("grunnlag1", "grunnlag2"));
-        behandling.setPersonopplysningIds(Arrays.asList("opplysning1", "opplysning2"));
-
-        RequestFintEvent requestFintEvent = new RequestFintEvent();
-        when(kafkaProducer.sendEvent(eq(OperationType.CREATE), eq("behandling"), eq(orgName), any(BehandlingResource.class))).thenReturn(requestFintEvent);
-
-        String corrId = behandlingService.create(orgName, behandling);
-
-        assertEquals(corrId, requestFintEvent.getCorrId());
-    }
-
-    @Test
-    void testUpdateBehandlingState() {
-        BehandlingResource behandlingResource = new BehandlingResource();
-        RequestFintEvent requestFintEvent = new RequestFintEvent();
-        String orgName = "orgName";
-        String id = "ae581cbe-8c8f-4157-8bda-01e499c89143";
-
-        behandlingResource = new BehandlingResource();
-
-        behandlingResource.setAktiv(false);
-
-        requestFintEvent = kafkaProducer.sendEvent(OperationType.CREATE, "behandling", orgName, behandlingResource);
-        behandlingResource.setAktiv(true);
-        requestFintEvent.setCorrId(id);
-        eventStatusService.add(requestFintEvent.getCorrId());
-
-        verify(eventStatusService).add(requestFintEvent.getCorrId());
-        assertTrue(behandlingResource.getAktiv());
     }
 
 
     @Test
-    public void testAddResource() {
+    void getBehandlingerReturnsListWhenGivvenOrgId() {
         String orgId = "orgId";
-        String orgName = "orgName";
-        behandlingService.addResource(orgId, behandlingResource);
-
-        String identifikatorverdi = behandlingResource.getSystemId().getIdentifikatorverdi();
-
-        behandlingResources.put(OrgIdUtil.uniform(orgId), identifikatorverdi, behandlingResource);
-
-        Optional<BehandlingResource> resourceOptional = behandlingResources.getResource(orgId, identifikatorverdi);
-        assertTrue(resourceOptional.isPresent());
-    }
-
-    @Test
-    public void testStatus() {
-        Behandling behandling = new Behandling();
-        behandling.setAktiv(true);
-        behandling.setId("id");
-        boolean result = behandlingService.status(behandling.getId());
-        assertFalse(result);
-    }
-
-    @Disabled
-    @Test
-    public void testGetBehandlinger() {
-        String orgName = "orgName";
-        OrgIdUtil orgIdUtil = mock(OrgIdUtil.class);
-        Behandling behandling = new Behandling();
-
         BehandlingResource resource1 = new BehandlingResource();
+        BehandlingResource resource2 = new BehandlingResource();
+        when(behandlingResources.getResources(orgId)).thenReturn(Arrays.asList(resource1, resource2));
 
-        List<Behandling> behandlinger = behandlingService.getBehandlinger(orgName);
+        List<Behandling> behandlinger = behandlingService.getBehandlinger(orgId);
 
+        assertNotNull(behandlinger);
         assertEquals(2, behandlinger.size());
+    }
+
+    @Test
+    void createBehandling() {
+        String orgName = "orgName";
+        String formal = "someFormal";
+        Behandling behandling = new Behandling();
+        behandling.setFormal(formal);
+        behandling.setTjenesteIds(Collections.singletonList("tjenesteId"));
+        behandling.setBehandlingsgrunnlagIds(Collections.singletonList("behandlingsgrunnlagId"));
+        behandling.setPersonopplysningIds(Collections.singletonList("personopplysningId"));
+
+        when(kafkaProducer.sendEvent(any(OperationType.class), anyString(), anyString(), any()))
+                .thenReturn(new RequestFintEvent("correlationId", "orgId", "domainName", "packageName", "resourceName", OperationType.CREATE, 123L, 456L, "value"));
+
+        String correlationId = behandlingService.create(orgName, behandling);
+
+        assertNotNull(correlationId);
+        assertEquals("correlationId", correlationId);
+        verify(eventStatusService).add("correlationId");
+        verify(tjenesteService).updateTjeneste(orgName, behandling);
+    }
+
+    @Test
+    void updateStatusTest() {
+        String orgName = "orgName";
+        String id = "someId";
+        boolean aktiv = true;
+        BehandlingResource behandlingResource = new BehandlingResource();
+        behandlingResource.setAktiv(false);
+        Optional<BehandlingResource> result = Optional.of(behandlingResource);
+
+        when(behandlingResources.getResource(orgName, id)).thenReturn(result);
+        when(kafkaProducer.sendEvent(any(OperationType.class), anyString(), anyString(), any()))
+                .thenReturn(new RequestFintEvent("correlationId", "orgId", "domainName",
+                        "packageName", "resourceName", OperationType.CREATE, 123L,
+                        456L, "value"));
+
+        String correlationId = behandlingService.updateState(orgName, id, aktiv);
+
+        assertEquals("correlationId", correlationId);
+        assertTrue(behandlingResource.getAktiv());
+        verify(eventStatusService).add("correlationId");
     }
 }
