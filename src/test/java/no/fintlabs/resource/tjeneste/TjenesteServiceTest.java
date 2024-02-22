@@ -15,16 +15,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-@Disabled
 class TjenesteServiceTest {
 
     TjenesteMapper tjenesteMapper = new TjenesteMapper(new ApplicationProperties());
@@ -91,19 +86,16 @@ class TjenesteServiceTest {
     @Disabled
     @Test
     public void testUpdateTjeneste() {
-        String orgName = "TestOrg";
         Behandling behandling = new Behandling();
-        String tjenesteId = "TjenesteId";
-        List<String> tjenesteIds = new ArrayList<>();
-        tjenesteIds.add(tjenesteId);
-        behandling.setTjenesteIds(tjenesteIds);
+        behandling.setId("someId");
+        behandling.getTjenesteIds().add("tjenesteId");
 
         TjenesteResource tjenesteResource = new TjenesteResource();
-        Mockito.when(tjenesteResources.getResource(orgName, tjenesteId)).thenReturn(Optional.of(tjenesteResource));
+        when(tjenesteResources.getResource(anyString(), anyString())).thenReturn(java.util.Optional.of(tjenesteResource));
 
-        tjenesteService.updateTjeneste(orgName, behandling);
+        tjenesteService.updateTjeneste("orgName", behandling);
 
-        verify(kafkaProducer, times(1)).sendEvent(eq(OperationType.UPDATE), eq("tjeneste"), eq(orgName), any(Tjeneste.class));
+        verify(kafkaProducer).sendEvent(eq(OperationType.UPDATE), eq("tjeneste"), eq("orgName"), eq(tjenesteResource));
     }
 
 }
