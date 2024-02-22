@@ -28,7 +28,8 @@ spec:
     basePath: /consent-admin
   ingress:
     enabled: true
-    basePath: /consent-admin
+    middlewares:
+      - fint-kunde-portal-sso
   resources:
     limits:
       memory: "1024Mi"
