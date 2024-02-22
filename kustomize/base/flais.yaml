@@ -14,7 +14,6 @@ metadata:
 spec:
   orgId: fintlabs.no
   image: ghcr.io/fintlabs/fint-samtykke-admin-backend:sha-0000000
-  imagePullPolicy: Always
   envFrom:
     - secretRef:
         name: fint-samtykke-admin-backend-kafka
@@ -37,8 +36,3 @@ spec:
     requests:
       memory: "128Mi"
       cpu: "100m"
-  restartPolicy: Always
-  replicas: 1
-  strategy:
-    type: RollingUpdate
-    rollingUpdate: { maxSurge: 1, maxUnavailable: 0 }
