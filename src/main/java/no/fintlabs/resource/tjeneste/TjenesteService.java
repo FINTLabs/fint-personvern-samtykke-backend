@@ -40,7 +40,6 @@ public class TjenesteService {
     }
 
     public void addResource(String orgId, TjenesteResource resource, String corrId) {
-        log.info("Received tjeneste for: " + resource.getSystemId().getIdentifikatorverdi());
         tjenesteResources.put(OrgIdUtil.uniform(orgId), resource.getSystemId().getIdentifikatorverdi(), resource);
         eventStatusService.update(corrId);
     }

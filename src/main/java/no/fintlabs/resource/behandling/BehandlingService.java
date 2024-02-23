@@ -51,7 +51,6 @@ public class BehandlingService {
     }
 
     public void addResource(String orgId, BehandlingResource resource) {
-        log.info("Received behandling for: " + resource.getSystemId().getIdentifikatorverdi());
         behandlingResources.put(OrgIdUtil.uniform(orgId), resource.getSystemId().getIdentifikatorverdi(), resource);
     }
 

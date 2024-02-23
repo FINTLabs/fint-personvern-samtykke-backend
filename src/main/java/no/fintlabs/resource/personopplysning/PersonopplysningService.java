@@ -35,7 +35,6 @@ public class PersonopplysningService {
     }
 
     public void addResource(PersonopplysningResource resource) {
-        log.info("Received personopplysnings for: " + resource.getSystemId().getIdentifikatorverdi());
         personopplysningResources.put(resource.getSystemId().getIdentifikatorverdi(), resource);
     }
 }
