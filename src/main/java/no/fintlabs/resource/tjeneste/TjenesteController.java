@@ -35,12 +35,8 @@ public class TjenesteController {
 
     @GetMapping("/status/{corrId}")
     public ResponseEntity<?> status(@PathVariable String corrId) {
-        log.info("Reached controller finding status for corrId: " + corrId);
-
         boolean status = tjenesteService.status(corrId);
-
-        log.info("Status return from tjeneste service: " + status);
-
+        log.info("Corr-id status: {} - {}", corrId, status);
         return status ? ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
