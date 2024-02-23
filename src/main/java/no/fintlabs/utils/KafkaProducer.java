@@ -17,9 +17,7 @@ import java.util.UUID;
 public class KafkaProducer {
 
     private static final int RETENTION_TIME_MS = 172800000;
-
     private final EventProducer<Object> eventProducer;
-
     private final EventTopicService eventTopicService;
 
     public KafkaProducer(EventProducerFactory eventProducerFactory, EventTopicService eventTopicService) {
@@ -28,40 +26,19 @@ public class KafkaProducer {
     }
 
     public RequestFintEvent sendEvent(OperationType operationType, String resourceName, String orgId, Object value) {
-
-        RequestFintEvent requestFintEvent = new RequestFintEvent();
-        requestFintEvent.setCorrId(UUID.randomUUID().toString());
-        requestFintEvent.setOrgId(OrgIdUtil.toKafkaEvent(orgId));
-        requestFintEvent.setDomainName("personvern");
-        requestFintEvent.setPackageName("samtykke");
-        requestFintEvent.setResourceName(resourceName);
-        requestFintEvent.setOperationType(operationType);
-        requestFintEvent.setCreated(System.currentTimeMillis());
-        requestFintEvent.setValue(convertToJson(value));
-
-        String eventName = String.format("%s-%s-%s-%s",
-                "personvern-samtykke-",
-                resourceName,
-                operationType.equals(OperationType.CREATE) ? "create" : "update",
-                "request");
-
-        EventTopicNameParameters topicNameParameters = EventTopicNameParameters
-                .builder()
-                .orgId(OrgIdUtil.toKafkaTopic(orgId))
-                .domainContext("fint-core")
-                .eventName(eventName)
-                .build();
-
+        RequestFintEvent requestEvent = createRequestEvent(orgId, resourceName, operationType, value);
+        String eventName = createEventName(resourceName, operationType);
+        EventTopicNameParameters topicNameParameters = createTopicNameParameters(orgId, eventName);
         eventTopicService.ensureTopic(topicNameParameters, RETENTION_TIME_MS);
 
         eventProducer.send(
                 EventProducerRecord.builder()
                         .topicNameParameters(topicNameParameters)
-                        .value(requestFintEvent)
+                        .value(requestEvent)
                         .build()
         );
 
-        return requestFintEvent;
+        return requestEvent;
     }
 
     private String convertToJson(Object body) {
@@ -72,4 +49,35 @@ public class KafkaProducer {
             throw new RuntimeException(e);
         }
     }
+
+    private EventTopicNameParameters createTopicNameParameters(String orgId, String eventName) {
+        return EventTopicNameParameters
+                .builder()
+                .orgId(OrgIdUtil.toKafkaTopic(orgId))
+                .domainContext("fint-core")
+                .eventName(eventName)
+                .build();
+    }
+
+    private String createEventName(String resourceName, OperationType operationType) {
+        return String.format("%s-%s-%s-%s",
+                "personvern-samtykke",
+                resourceName,
+                operationType.equals(OperationType.CREATE) ? "create" : "update",
+                "request");
+    }
+
+    private RequestFintEvent createRequestEvent(String orgId, String resourceName, OperationType operationType, Object value) {
+        RequestFintEvent requestFintEvent = new RequestFintEvent();
+        requestFintEvent.setCorrId(UUID.randomUUID().toString());
+        requestFintEvent.setOrgId(OrgIdUtil.toKafkaEvent(orgId));
+        requestFintEvent.setDomainName("personvern");
+        requestFintEvent.setPackageName("samtykke");
+        requestFintEvent.setResourceName(resourceName);
+        requestFintEvent.setOperationType(operationType);
+        requestFintEvent.setCreated(System.currentTimeMillis());
+        requestFintEvent.setValue(convertToJson(value));
+        return requestFintEvent;
+    }
+
 }
