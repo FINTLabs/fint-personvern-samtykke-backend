@@ -1,9 +1,7 @@
 package no.fintlabs.resource.tjeneste;
 
-import com.nimbusds.oauth2.sdk.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import no.fintlabs.utils.LocationHeader;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
@@ -29,19 +27,19 @@ public class TjenesteController {
     @PostMapping("/{orgName}")
     public ResponseEntity<Tjeneste> createTjeneste(ServerHttpRequest request, @PathVariable String orgName, @RequestBody Tjeneste tjeneste) {
         String corrId = tjenesteService.create(orgName, tjeneste);
-        log.info("Reached controller with corrId: " + corrId);
+        log.info("Creating tjeneste with corr-id: {}", corrId);
         return ResponseEntity.created(LocationHeader.get(corrId, request)).build();
     }
 
     @GetMapping("/status/{corrId}")
-    public ResponseEntity<?> status(@PathVariable String corrId) {
+    public ResponseEntity<?> status(ServerHttpRequest request, @PathVariable String corrId) {
         boolean status = tjenesteService.status(corrId);
         log.info("Corr-id status: {} - {}", corrId, status);
-        return status ? ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        return status ? ResponseEntity.created(LocationHeader.get(corrId, request)).build() : ResponseEntity.accepted().build();
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(Exception e){
+    public ResponseEntity<String> handleIllegalArgumentException(Exception e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

@@ -1,6 +1,7 @@
 package no.fintlabs.resource.behandling;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import no.fintlabs.utils.LocationHeader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/behandling")
 @RestController
+@Slf4j
 public class BehandlingController {
 
     private final BehandlingService behandlingService;
@@ -24,6 +26,7 @@ public class BehandlingController {
     @PostMapping("/{orgName}")
     public ResponseEntity<Void> createBehandling(ServerHttpRequest request, @PathVariable String orgName, @RequestBody Behandling behandling) {
         String corrId = behandlingService.create(orgName, behandling);
+        log.info("Creating behandling with corr-id: {}", corrId);
         return ResponseEntity.created(LocationHeader.get(corrId, request)).build();
     }
 
@@ -34,8 +37,10 @@ public class BehandlingController {
     }
 
     @GetMapping("/status/{corrId}")
-    public ResponseEntity<Void> status(@PathVariable String corrId) {
-        return behandlingService.status(corrId) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.PROCESSING).build();
+    public ResponseEntity<Void> status(ServerHttpRequest request, @PathVariable String corrId) {
+        boolean status = behandlingService.status(corrId);
+        log.info("Corr-id status: {} - {}", corrId, status);
+        return status ? ResponseEntity.created(LocationHeader.get(corrId, request)).build() : ResponseEntity.accepted().build();
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
