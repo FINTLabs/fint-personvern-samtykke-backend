@@ -2,6 +2,7 @@ package no.fintlabs.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.net.httpserver.Headers;
 import no.fintlabs.adapter.models.OperationType;
 import no.fintlabs.adapter.models.RequestFintEvent;
 import no.fintlabs.kafka.event.EventProducer;
@@ -9,8 +10,11 @@ import no.fintlabs.kafka.event.EventProducerFactory;
 import no.fintlabs.kafka.event.EventProducerRecord;
 import no.fintlabs.kafka.event.topic.EventTopicNameParameters;
 import no.fintlabs.kafka.event.topic.EventTopicService;
+import org.apache.kafka.common.header.internals.RecordHeaders;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -38,6 +42,12 @@ public class KafkaProducer {
         );
 
         return requestEvent;
+    }
+
+    private RecordHeaders createHeaders(String corrId) {
+        RecordHeaders headers = new RecordHeaders();
+        headers.add("event-corr-id", corrId.getBytes(StandardCharsets.UTF_8));
+        return headers;
     }
 
     private String convertToJson(Object body) {
