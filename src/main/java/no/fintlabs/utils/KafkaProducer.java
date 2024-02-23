@@ -44,12 +44,6 @@ public class KafkaProducer {
         return requestEvent;
     }
 
-    private RecordHeaders createHeaders(String corrId) {
-        RecordHeaders headers = new RecordHeaders();
-        headers.add("event-corr-id", corrId.getBytes(StandardCharsets.UTF_8));
-        return headers;
-    }
-
     private String convertToJson(Object body) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
