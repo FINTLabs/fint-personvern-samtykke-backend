@@ -41,7 +41,7 @@ public class TjenesteController {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity handleIllegalArgumentException(Exception e){
+    public ResponseEntity<String> handleIllegalArgumentException(Exception e){
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 }
