@@ -27,8 +27,7 @@ public class KafkaProducer {
 
     public RequestFintEvent sendEvent(OperationType operationType, String resourceName, String orgId, Object value) {
         RequestFintEvent requestEvent = createRequestEvent(orgId, resourceName, operationType, value);
-        String eventName = createEventName(resourceName, operationType);
-        EventTopicNameParameters topicNameParameters = createTopicNameParameters(orgId, eventName);
+        EventTopicNameParameters topicNameParameters = createTopicNameParameters(orgId, createEventName(resourceName, operationType));
         eventTopicService.ensureTopic(topicNameParameters, RETENTION_TIME_MS);
 
         eventProducer.send(
