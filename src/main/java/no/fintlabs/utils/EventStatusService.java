@@ -9,14 +9,10 @@ import java.util.Map;
 @Service
 @Slf4j
 public class EventStatusService {
-    private final Map<String, Boolean> status;
 
-    public EventStatusService() {
-        status = new HashMap<>();
-    }
+    private final Map<String, Boolean> status = new HashMap<>();
 
     public void add(String corrId) {
-        log.info("Adding a corrId to event status map: " + corrId);
         status.put(corrId, false);
     }
 
@@ -25,7 +21,6 @@ public class EventStatusService {
     }
 
     public boolean get(String corrId) {
-        log.info("Reached get in eventstatus for corrId" + corrId);
-        return status.getOrDefault(corrId,false);
+        return status.getOrDefault(corrId, false);
     }
 }
