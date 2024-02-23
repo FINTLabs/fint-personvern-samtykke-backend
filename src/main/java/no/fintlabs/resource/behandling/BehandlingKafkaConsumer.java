@@ -26,7 +26,7 @@ public class BehandlingKafkaConsumer {
     private void setupConsumer() {
         entityConsumerFactoryService.createFactory(
                 BehandlingResource.class,
-                consumerRecord -> processEntity(consumerRecord)
+                this::processEntity
         ).createContainer(
                 EntityTopicNamePatternParameters
                         .builder()
