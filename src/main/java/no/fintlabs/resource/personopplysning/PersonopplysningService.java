@@ -25,13 +25,11 @@ public class PersonopplysningService {
     }
 
     private Personopplysning createPersonopplysning(PersonopplysningResource personopplysningResource) {
-        Personopplysning personopplysning = new Personopplysning();
-
-        personopplysning.setId(personopplysningResource.getSystemId().getIdentifikatorverdi());
-        personopplysning.setKode(personopplysningResource.getKode());
-        personopplysning.setNavn(personopplysningResource.getNavn());
-
-        return personopplysning;
+        return Personopplysning.builder()
+                .id(personopplysningResource.getSystemId().getIdentifikatorverdi())
+                .kode(personopplysningResource.getKode())
+                .navn(personopplysningResource.getNavn())
+                .build();
     }
 
     public void addResource(PersonopplysningResource resource) {
