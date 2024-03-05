@@ -3,11 +3,12 @@ package no.fintlabs.resource.personopplysning;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.personvern.kodeverk.PersonopplysningResource;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -67,5 +68,4 @@ class PersonopplysningServiceTest {
         assertEquals(1, personopplysningList.size());
         assertEquals("1", personopplysningList.get(0).getId());
     }
-
 }

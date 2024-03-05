@@ -82,20 +82,4 @@ class TjenesteServiceTest {
         verify(eventStatusService).update(corrId);
 
     }
-
-    @Disabled
-    @Test
-    public void testUpdateTjeneste() {
-        Behandling behandling = new Behandling();
-        behandling.setId("someId");
-        behandling.getTjenesteIds().add("tjenesteId");
-
-        TjenesteResource tjenesteResource = new TjenesteResource();
-        when(tjenesteResources.getResource(anyString(), anyString())).thenReturn(java.util.Optional.of(tjenesteResource));
-
-        tjenesteService.updateTjeneste("orgName", behandling);
-
-        verify(kafkaProducer).sendEvent(eq(OperationType.UPDATE), eq("tjeneste"), eq("orgName"), eq(tjenesteResource));
-    }
-
 }
