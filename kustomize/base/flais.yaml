@@ -22,13 +22,6 @@ spec:
     acls:
       - permission: admin
         topic: '*.fint-core.*.personvern-*'
-  url:
-    hostname: kunde-beta.felleskomponent.no
-    basePath: /consent-admin
-  ingress:
-    enabled: true
-    middlewares:
-      - fint-kunde-portal-sso
   resources:
     limits:
       memory: "1024Mi"
