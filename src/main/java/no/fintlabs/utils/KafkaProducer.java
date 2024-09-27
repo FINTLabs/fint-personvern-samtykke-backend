@@ -2,7 +2,6 @@ package no.fintlabs.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.net.httpserver.Headers;
 import no.fintlabs.adapter.models.OperationType;
 import no.fintlabs.adapter.models.RequestFintEvent;
 import no.fintlabs.kafka.event.EventProducer;
@@ -10,11 +9,8 @@ import no.fintlabs.kafka.event.EventProducerFactory;
 import no.fintlabs.kafka.event.EventProducerRecord;
 import no.fintlabs.kafka.event.topic.EventTopicNameParameters;
 import no.fintlabs.kafka.event.topic.EventTopicService;
-import org.apache.kafka.common.header.internals.RecordHeaders;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -31,7 +27,7 @@ public class KafkaProducer {
 
     public RequestFintEvent sendEvent(OperationType operationType, String resourceName, String orgId, Object value) {
         RequestFintEvent requestEvent = createRequestEvent(orgId, resourceName, operationType, value);
-        EventTopicNameParameters topicNameParameters = createTopicNameParameters(orgId, createEventName(resourceName, operationType));
+        EventTopicNameParameters topicNameParameters = createTopicNameParameters(orgId, createEventName(resourceName));
         eventTopicService.ensureTopic(topicNameParameters, RETENTION_TIME_MS);
 
         eventProducer.send(
@@ -62,11 +58,10 @@ public class KafkaProducer {
                 .build();
     }
 
-    private String createEventName(String resourceName, OperationType operationType) {
-        return String.format("%s-%s-%s-%s",
+    private String createEventName(String resourceName) {
+        return String.format("%s-%s-%s",
                 "personvern-samtykke",
                 resourceName,
-                operationType.equals(OperationType.CREATE) ? "create" : "update",
                 "request");
     }
 
